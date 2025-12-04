@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/Navbar.css";
+import logo from "../assets/Brown_Salon_Logo.png";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -10,11 +11,7 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top bg-dark shadow-sm">
       <div className="container">
         <a className="navbar-brand d-flex align-items-center" href="#">
-          <img
-            src="/src/assets/Brown_Salon_Logo.png"
-            alt="Brown Hair Logo"
-            className="brand-logo me-2"
-          />
+          <img src={logo} alt="Brown Hair Logo" className="brand-logo me-2" />
 
           <div className="brand-text">
             <span className="brand-main">BROWN</span>
