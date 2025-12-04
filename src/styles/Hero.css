@@ -30,7 +30,7 @@
 
 @media (max-width: 768px) {
   .hero-parallax {
-    min-height: 50vh !important;
+    min-height: 70vh !important;
     padding-top: 60px;
   }
 
@@ -50,7 +50,7 @@
 
 @media (max-width: 480px) {
   .hero-parallax {
-    min-height: 50vh !important;
+    min-height: 70vh !important;
     padding-top: 50px;
   }
 
