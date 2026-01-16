@@ -44,7 +44,7 @@ export default function Dashboard() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/appointments")
+    fetch("https://brown-salon-backend.onrender.com/api/appointments")
       .then((res) => res.json())
       .then(setData);
   }, []);
@@ -64,11 +64,14 @@ export default function Dashboard() {
     .slice(0, 5);
 
   const updateStatus = async (id, status) => {
-    await fetch(`http://localhost:5000/api/appointments/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/appointments/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      }
+    );
 
     setData((prev) => prev.map((a) => (a._id === id ? { ...a, status } : a)));
 

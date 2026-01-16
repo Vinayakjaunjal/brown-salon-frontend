@@ -13,18 +13,21 @@ export default function Admin() {
     }
 
     // 📥 Fetch appointments
-    fetch("http://localhost:5000/api/appointments")
+    fetch("https://brown-salon-backend.onrender.com/api/appointments")
       .then((res) => res.json())
       .then(setData)
       .catch(() => alert("Failed to load appointments"));
   }, []);
 
   const updateStatus = async (id, status) => {
-    await fetch(`http://localhost:5000/api/appointments/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/appointments/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      }
+    );
 
     setData((prev) =>
       prev.map((item) => (item._id === id ? { ...item, status } : item))

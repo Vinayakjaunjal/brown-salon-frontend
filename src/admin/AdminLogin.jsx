@@ -24,13 +24,16 @@ export default function AdminLogin() {
 
   const login = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ identifier, password }),
-      });
+      const res = await fetch(
+        "https://brown-salon-backend.onrender.com/api/admin/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ identifier, password }),
+        }
+      );
 
       const data = await res.json();
 

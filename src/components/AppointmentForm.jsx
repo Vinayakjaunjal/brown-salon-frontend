@@ -32,12 +32,12 @@ export default function AppointmentForm() {
 
     try {
       const apRes = await fetch(
-        `http://localhost:5000/api/appointments?date=${selectedDate}`
+        `https://brown-salon-backend.onrender.com/api/appointments?date=${selectedDate}`
       );
       const appointments = await apRes.json();
 
       const slRes = await fetch(
-        `http://localhost:5000/api/slots?date=${selectedDate}`
+        `https://brown-salon-backend.onrender.com/api/slots?date=${selectedDate}`
       );
       const slots = await slRes.json();
 
@@ -69,14 +69,18 @@ export default function AppointmentForm() {
   useEffect(() => {
     if (!formData.date) return;
 
-    fetch(`http://localhost:5000/api/appointments?date=${formData.date}`)
+    fetch(
+      `https://brown-salon-backend.onrender.com/api/appointments?date=${formData.date}`
+    )
       .then((res) => res.json())
       .then((data) => {
         const approved = data.filter((a) => a.status === "approved");
         setAppointments(approved);
       });
 
-    fetch(`http://localhost:5000/api/slots?date=${formData.date}`)
+    fetch(
+      `https://brown-salon-backend.onrender.com/api/slots?date=${formData.date}`
+    )
       .then((res) => res.json())
       .then((data) => {
         const booked = data
@@ -99,11 +103,14 @@ export default function AppointmentForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/appointments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://brown-salon-backend.onrender.com/api/appointments",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const result = await response.json();
 

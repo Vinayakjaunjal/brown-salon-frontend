@@ -40,7 +40,7 @@ export default function ResetPassword() {
     }
 
     const res = await fetch(
-      `http://localhost:5000/api/admin/reset-password/${token}`,
+      `https://brown-salon-backend.onrender.com/api/admin/reset-password/${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

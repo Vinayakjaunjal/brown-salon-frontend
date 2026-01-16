@@ -24,7 +24,7 @@ const Pricing = () => {
   const [pricing, setPricing] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/pricing")
+    fetch("https://brown-salon-backend.onrender.com/api/pricing")
       .then((res) => res.json())
       .then((data) => setPricing(data))
       .catch((err) => console.error("Pricing fetch error", err));

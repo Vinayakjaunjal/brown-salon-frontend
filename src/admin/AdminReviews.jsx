@@ -47,7 +47,9 @@ export default function AdminReviews() {
   };
 
   const loadReviews = async () => {
-    const res = await fetch("http://localhost:5000/api/reviews");
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/reviews"
+    );
     const data = await res.json();
     setReviews(data);
   };
@@ -69,8 +71,8 @@ export default function AdminReviews() {
     if (image) fd.append("image", image);
 
     const url = editId
-      ? `http://localhost:5000/api/reviews/${editId}`
-      : "http://localhost:5000/api/reviews";
+      ? `https://brown-salon-backend.onrender.com/api/reviews/${editId}`
+      : "https://brown-salon-backend.onrender.com/api/reviews";
 
     await fetch(url, { method: editId ? "PUT" : "POST", body: fd });
 
@@ -86,7 +88,8 @@ export default function AdminReviews() {
   const editReview = (r) => {
     setForm({ name: r.name, review: r.review, rating: r.rating });
     setEditId(r._id);
-    if (r.image) setPreview(`http://localhost:5000${r.image}`);
+    if (r.image)
+      setPreview(`https://brown-salon-backend.onrender.com${r.image}`);
   };
 
   const askDelete = (id) => {
@@ -95,9 +98,12 @@ export default function AdminReviews() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`http://localhost:5000/api/reviews/${deleteId}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/reviews/${deleteId}`,
+      {
+        method: "DELETE",
+      }
+    );
     setConfirmOpen(false);
     setDeleteId(null);
     loadReviews();
@@ -105,9 +111,12 @@ export default function AdminReviews() {
   };
 
   const toggleReview = async (id) => {
-    await fetch(`http://localhost:5000/api/reviews/${id}/toggle`, {
-      method: "PUT",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/reviews/${id}/toggle`,
+      {
+        method: "PUT",
+      }
+    );
     loadReviews();
     showSnack("Status updated");
   };
@@ -175,7 +184,7 @@ export default function AdminReviews() {
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 {r.image ? (
                   <img
-                    src={`http://localhost:5000${r.image}`}
+                    src={`https://brown-salon-backend.onrender.com${r.image}`}
                     alt=""
                     width={50}
                     height={50}
@@ -249,7 +258,7 @@ export default function AdminReviews() {
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 {r.image ? (
                   <img
-                    src={`http://localhost:5000${r.image}`}
+                    src={`https://brown-salon-backend.onrender.com${r.image}`}
                     alt=""
                     width={60}
                     height={60}

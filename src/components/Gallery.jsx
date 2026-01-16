@@ -11,7 +11,7 @@ const Gallery = () => {
   const currentTranslate = useRef(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/gallery")
+    fetch("https://brown-salon-backend.onrender.com/api/gallery")
       .then((res) => res.json())
       .then((data) => setImages(data));
   }, []);
@@ -52,7 +52,7 @@ const Gallery = () => {
           {loopImages.map((img) => (
             <div className="gallery-item" key={img._id}>
               <img
-                src={`http://localhost:5000${img.image}`}
+                src={`https://brown-salon-backend.onrender.com${img.image}`}
                 alt=""
                 className="clickable"
                 onClick={() => setLightbox(img.image)}
@@ -65,7 +65,7 @@ const Gallery = () => {
       {lightbox && (
         <div className="lightbox" onClick={() => setLightbox(null)}>
           <img
-            src={`http://localhost:5000${lightbox}`}
+            src={`https://brown-salon-backend.onrender.com${lightbox}`}
             alt=""
             className="lightbox-img"
           />

@@ -77,7 +77,9 @@ export default function Birthdays() {
 
   // Load birthday customers
   const loadCustomers = async () => {
-    const res = await fetch("http://localhost:5000/api/birthday-customers");
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/birthday-customers"
+    );
     const data = await res.json();
     setCustomers(data);
   };
@@ -108,11 +110,14 @@ export default function Birthdays() {
       return;
     }
 
-    await fetch("http://localhost:5000/api/birthday-customers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    await fetch(
+      "https://brown-salon-backend.onrender.com/api/birthday-customers",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      }
+    );
 
     setForm({ name: "", email: "", phone: "", dob: "" });
     loadCustomers();
@@ -123,7 +128,7 @@ export default function Birthdays() {
 
   // Send Wish Function
   const sendWish = async (customer) => {
-    await fetch("http://localhost:5000/api/birthday-wish", {
+    await fetch("https://brown-salon-backend.onrender.com/api/birthday-wish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -137,9 +142,12 @@ export default function Birthdays() {
 
   // Delete Birthday Button
   const confirmDelete = async () => {
-    await fetch(`http://localhost:5000/api/birthdays/${deleteId}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/birthdays/${deleteId}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     setCustomers((prev) => prev.filter((c) => c._id !== deleteId));
     setConfirmOpen(false);

@@ -48,7 +48,9 @@ export default function ServicesAdmin() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const loadServices = async () => {
-    const res = await fetch("http://localhost:5000/api/services");
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/services"
+    );
     const data = await res.json();
     setServices(data);
   };
@@ -85,8 +87,8 @@ export default function ServicesAdmin() {
     }
 
     const url = editId
-      ? `http://localhost:5000/api/services/${editId}`
-      : "http://localhost:5000/api/services";
+      ? `https://brown-salon-backend.onrender.com/api/services/${editId}`
+      : "https://brown-salon-backend.onrender.com/api/services";
 
     await fetch(url, {
       method: editId ? "PUT" : "POST",
@@ -115,9 +117,12 @@ export default function ServicesAdmin() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`http://localhost:5000/api/services/${deleteId}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/services/${deleteId}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     setConfirmOpen(false);
     setDeleteId(null);

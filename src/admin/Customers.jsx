@@ -23,7 +23,7 @@ export default function Customers() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/appointments")
+    fetch("https://brown-salon-backend.onrender.com/api/appointments")
       .then((res) => res.json())
       .then((data) => {
         const map = {};

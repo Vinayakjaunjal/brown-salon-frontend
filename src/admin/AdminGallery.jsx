@@ -45,7 +45,9 @@ export default function AdminGallery() {
   };
 
   const loadGallery = async () => {
-    const res = await fetch("http://localhost:5000/api/gallery");
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/gallery"
+    );
     const data = await res.json();
     setImages(data);
   };
@@ -63,7 +65,7 @@ export default function AdminGallery() {
     const fd = new FormData();
     fd.append("image", file);
 
-    await fetch("http://localhost:5000/api/gallery", {
+    await fetch("https://brown-salon-backend.onrender.com/api/gallery", {
       method: "POST",
       body: fd,
     });
@@ -79,9 +81,12 @@ export default function AdminGallery() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`http://localhost:5000/api/gallery/${deleteId}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/gallery/${deleteId}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     setConfirmOpen(false);
     setDeleteId(null);
@@ -98,11 +103,14 @@ export default function AdminGallery() {
 
     setImages(items);
 
-    await fetch("http://localhost:5000/api/gallery/reorder", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items }),
-    });
+    await fetch(
+      "https://brown-salon-backend.onrender.com/api/gallery/reorder",
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      }
+    );
   };
 
   return (
@@ -165,7 +173,7 @@ export default function AdminGallery() {
                         }}
                       >
                         <img
-                          src={`http://localhost:5000${img.image}`}
+                          src={`https://brown-salon-backend.onrender.com${img.image}`}
                           alt=""
                           style={{
                             width: "100%",

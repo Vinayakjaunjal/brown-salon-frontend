@@ -69,9 +69,11 @@ export default function Slots() {
     }
 
     const apRes = await fetch(
-      `http://localhost:5000/api/appointments?date=${date}`
+      `https://brown-salon-backend.onrender.com/api/appointments?date=${date}`
     );
-    const slRes = await fetch(`http://localhost:5000/api/slots?date=${date}`);
+    const slRes = await fetch(
+      `https://brown-salon-backend.onrender.com/api/slots?date=${date}`
+    );
 
     setAppointments(await apRes.json());
     setSlots(await slRes.json());
@@ -127,7 +129,7 @@ export default function Slots() {
   };
 
   const saveSlots = async () => {
-    await fetch("http://localhost:5000/api/slots", {
+    await fetch("https://brown-salon-backend.onrender.com/api/slots", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date, slots }),

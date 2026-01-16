@@ -16,11 +16,14 @@ export default function AdminProfile() {
   const token = localStorage.getItem("adminToken");
 
   const loadProfile = async () => {
-    const res = await fetch("http://localhost:5000/api/admin/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/admin/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.status === 401) return;
 
@@ -34,14 +37,17 @@ export default function AdminProfile() {
   }, []);
 
   const updateProfile = async () => {
-    const res = await fetch("http://localhost:5000/api/admin/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(form),
-    });
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/admin/profile",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      }
+    );
 
     const data = await res.json();
     setAdmin(data);

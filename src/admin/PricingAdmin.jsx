@@ -64,7 +64,9 @@ export default function PricingAdmin() {
   };
 
   const loadPricing = async () => {
-    const res = await fetch("http://localhost:5000/api/pricing");
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/pricing"
+    );
     const data = await res.json();
     setPricing(data);
   };
@@ -83,8 +85,8 @@ export default function PricingAdmin() {
     }
 
     const url = editId
-      ? `http://localhost:5000/api/pricing/${editId}`
-      : "http://localhost:5000/api/pricing";
+      ? `https://brown-salon-backend.onrender.com/api/pricing/${editId}`
+      : "https://brown-salon-backend.onrender.com/api/pricing";
 
     await fetch(url, {
       method: editId ? "PUT" : "POST",
@@ -109,9 +111,12 @@ export default function PricingAdmin() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`http://localhost:5000/api/pricing/${deleteId}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://brown-salon-backend.onrender.com/api/pricing/${deleteId}`,
+      {
+        method: "DELETE",
+      }
+    );
     setConfirmOpen(false);
     setDeleteId(null);
     loadPricing();

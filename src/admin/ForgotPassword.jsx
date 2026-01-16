@@ -16,11 +16,14 @@ export default function ForgotPassword() {
   const [type, setType] = useState("success");
 
   const sendLink = async () => {
-    const res = await fetch("http://localhost:5000/api/admin/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const res = await fetch(
+      "https://brown-salon-backend.onrender.com/api/admin/forgot-password",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
 
     const data = await res.json();
 

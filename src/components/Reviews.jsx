@@ -8,7 +8,7 @@ const Reviews = () => {
   const [pause, setPause] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/reviews")
+    fetch("https://brown-salon-backend.onrender.com/api/reviews")
       .then((res) => res.json())
       .then((data) => setReviews(data.filter((r) => r.isActive)));
   }, []);
@@ -55,7 +55,7 @@ const Reviews = () => {
           <div className="profile-img-wrapper">
             {current.image ? (
               <img
-                src={`http://localhost:5000${current.image}`}
+                src={`https://brown-salon-backend.onrender.com${current.image}`}
                 alt={current.name}
               />
             ) : (
