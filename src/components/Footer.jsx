@@ -29,10 +29,10 @@ const Footer = () => {
 
             <p>
               <a
-                href="mailto:vinayakjaunjal2003@gmail.com"
+                href="mailto:brown.unisex.salon@gmail.com"
                 className="footer-link"
               >
-                <FaEnvelope /> vinayakjaunjal2003@gmail.com
+                <FaEnvelope /> brown.unisex.salon@gmail.com
               </a>
             </p>
 

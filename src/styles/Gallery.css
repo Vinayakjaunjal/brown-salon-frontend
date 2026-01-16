@@ -9,11 +9,6 @@
   font-weight: 700;
 }
 
-.gallery-slider {
-  width: 100%;
-  overflow: hidden;
-}
-
 .gallery-track {
   display: flex;
   gap: 18px;
@@ -47,21 +42,27 @@
 
 .gallery-slider {
   width: 100%;
+  overflow: hidden;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
   cursor: grab;
+  position: relative;
 }
 
 .gallery-slider:active {
   cursor: grabbing;
 }
 
+.gallery-slider:hover .gallery-track {
+  animation-play-state: paused;
+}
+
 .gallery-track {
   display: flex;
   gap: 8px;
   width: max-content;
-  animation: scrollLeft 70s linear infinite;
+  animation: scrollLeft 35s linear infinite;
 }
 
 .clickable {

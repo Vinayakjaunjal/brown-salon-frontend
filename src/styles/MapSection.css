@@ -1,7 +1,7 @@
 .map-section {
   display: flex;
   gap: 40px;
-  padding: 60px 80px;
+  padding: 60px 40px;
   align-items: center;
   background: #fff;
 }

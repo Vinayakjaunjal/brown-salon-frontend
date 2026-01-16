@@ -35,16 +35,26 @@
 }
 
 .book-btn {
-  background: #d4af37;
-  border: none;
-  padding: 6px 16px;
-  border-radius: 6px;
-  cursor: pointer;
+  padding: 6px 20px;
+  border-radius: 5px;
+  width: 120px;
   font-weight: 600;
-  transition: 0.3 ease;
-  width: auto;
+  font-size: 14px;
   align-self: center;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.book-btn.primary {
+  background: linear-gradient(135deg, #d4af37, #b8962e);
+  color: #111;
+}
+
+.-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
 }
 
 @media (max-width: 600px) {
