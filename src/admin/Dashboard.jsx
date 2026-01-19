@@ -70,7 +70,7 @@ export default function Dashboard() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
-      }
+      },
     );
 
     setData((prev) => prev.map((a) => (a._id === id ? { ...a, status } : a)));
@@ -82,8 +82,8 @@ export default function Dashboard() {
         status === "approved"
           ? "success"
           : status === "rejected"
-          ? "error"
-          : "warning",
+            ? "error"
+            : "warning",
     });
   };
 
@@ -248,8 +248,8 @@ export default function Dashboard() {
                       app.status === "approved"
                         ? "#2e7d32"
                         : app.status === "rejected"
-                        ? "#d32f2f"
-                        : "#ed6c02",
+                          ? "#d32f2f"
+                          : "#ed6c02",
                     color: "#fff",
                   }}
                 >
@@ -290,8 +290,8 @@ export default function Dashboard() {
                           app.status === "approved"
                             ? "#2e7d32"
                             : app.status === "rejected"
-                            ? "#d32f2f"
-                            : "#ed6c02",
+                              ? "#d32f2f"
+                              : "#ed6c02",
                         color: "#fff",
                       }}
                     >

@@ -55,7 +55,7 @@ export default function Appointments() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
-      }
+      },
     );
 
     setData((prev) => prev.map((a) => (a._id === id ? { ...a, status } : a)));
@@ -72,7 +72,7 @@ export default function Appointments() {
   });
 
   const sortedData = [...filteredData].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
 
   return (
@@ -177,8 +177,8 @@ export default function Appointments() {
                       app.status === "approved"
                         ? "#2e7d32"
                         : app.status === "rejected"
-                        ? "#d32f2f"
-                        : "#ed6c02",
+                          ? "#d32f2f"
+                          : "#ed6c02",
                     color: "#fff",
                   }}
                 >
@@ -265,8 +265,8 @@ export default function Appointments() {
                           app.status === "approved"
                             ? "#2e7d32"
                             : app.status === "rejected"
-                            ? "#d32f2f"
-                            : "#ed6c02",
+                              ? "#d32f2f"
+                              : "#ed6c02",
                         color: "#fff",
                         "& .MuiSelect-icon": {
                           color: "#fff",

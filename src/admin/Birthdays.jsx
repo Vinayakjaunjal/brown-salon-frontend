@@ -78,7 +78,7 @@ export default function Birthdays() {
   // Load birthday customers
   const loadCustomers = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/birthday-customers"
+      "https://brown-salon-backend.onrender.com/api/birthday-customers",
     );
     const data = await res.json();
     setCustomers(data);
@@ -92,7 +92,7 @@ export default function Birthdays() {
     selectedMonth === "all"
       ? customers
       : customers.filter(
-          (c) => new Date(c.dob).getMonth() === Number(selectedMonth)
+          (c) => new Date(c.dob).getMonth() === Number(selectedMonth),
         );
 
   // Handle form change
@@ -116,7 +116,7 @@ export default function Birthdays() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
-      }
+      },
     );
 
     setForm({ name: "", email: "", phone: "", dob: "" });
@@ -146,7 +146,7 @@ export default function Birthdays() {
       `https://brown-salon-backend.onrender.com/api/birthdays/${deleteId}`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     setCustomers((prev) => prev.filter((c) => c._id !== deleteId));
@@ -165,7 +165,7 @@ Hope to see you soon!
 
     window.open(
       `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`,
-      "_blank"
+      "_blank",
     );
   };
 

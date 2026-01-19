@@ -50,7 +50,7 @@ export default function AdminHeader({ isMobile, onMenuClick }) {
 
   const fetchNotifications = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/notifications"
+      "https://brown-salon-backend.onrender.com/api/notifications",
     );
     const data = await res.json();
     setNotifications(data);

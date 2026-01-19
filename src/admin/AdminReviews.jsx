@@ -48,7 +48,7 @@ export default function AdminReviews() {
 
   const loadReviews = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/reviews"
+      "https://brown-salon-backend.onrender.com/api/reviews",
     );
     const data = await res.json();
     setReviews(data);
@@ -102,7 +102,7 @@ export default function AdminReviews() {
       `https://brown-salon-backend.onrender.com/api/reviews/${deleteId}`,
       {
         method: "DELETE",
-      }
+      },
     );
     setConfirmOpen(false);
     setDeleteId(null);
@@ -115,7 +115,7 @@ export default function AdminReviews() {
       `https://brown-salon-backend.onrender.com/api/reviews/${id}/toggle`,
       {
         method: "PUT",
-      }
+      },
     );
     loadReviews();
     showSnack("Status updated");

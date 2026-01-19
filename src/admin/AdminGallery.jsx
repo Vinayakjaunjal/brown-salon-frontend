@@ -46,7 +46,7 @@ export default function AdminGallery() {
 
   const loadGallery = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/gallery"
+      "https://brown-salon-backend.onrender.com/api/gallery",
     );
     const data = await res.json();
     setImages(data);
@@ -85,7 +85,7 @@ export default function AdminGallery() {
       `https://brown-salon-backend.onrender.com/api/gallery/${deleteId}`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     setConfirmOpen(false);
@@ -109,7 +109,7 @@ export default function AdminGallery() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items }),
-      }
+      },
     );
   };
 

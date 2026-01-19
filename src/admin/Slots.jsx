@@ -69,10 +69,10 @@ export default function Slots() {
     }
 
     const apRes = await fetch(
-      `https://brown-salon-backend.onrender.com/api/appointments?date=${date}`
+      `https://brown-salon-backend.onrender.com/api/appointments?date=${date}`,
     );
     const slRes = await fetch(
-      `https://brown-salon-backend.onrender.com/api/slots?date=${date}`
+      `https://brown-salon-backend.onrender.com/api/slots?date=${date}`,
     );
 
     setAppointments(await apRes.json());
@@ -96,7 +96,7 @@ export default function Slots() {
     if (isBooked(time)) return;
 
     setSelectedSlots((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
+      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time],
     );
   };
 
@@ -115,7 +115,7 @@ export default function Slots() {
           updated.push({ time, status: action });
         } else {
           updated = updated.map((s) =>
-            s.time === time ? { ...s, status: action } : s
+            s.time === time ? { ...s, status: action } : s,
           );
         }
       });
@@ -210,8 +210,8 @@ export default function Slots() {
                   {finalStatus === "booked"
                     ? "Booked"
                     : selectedSlots.includes(time)
-                    ? "Selected"
-                    : "Available"}
+                      ? "Selected"
+                      : "Available"}
                 </Typography>
               </Paper>
             </Grid>

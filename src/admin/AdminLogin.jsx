@@ -32,7 +32,7 @@ export default function AdminLogin() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ identifier, password }),
-        }
+        },
       );
 
       const data = await res.json();

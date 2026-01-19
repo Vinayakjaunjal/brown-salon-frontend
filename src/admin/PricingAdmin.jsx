@@ -65,7 +65,7 @@ export default function PricingAdmin() {
 
   const loadPricing = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/pricing"
+      "https://brown-salon-backend.onrender.com/api/pricing",
     );
     const data = await res.json();
     setPricing(data);
@@ -115,7 +115,7 @@ export default function PricingAdmin() {
       `https://brown-salon-backend.onrender.com/api/pricing/${deleteId}`,
       {
         method: "DELETE",
-      }
+      },
     );
     setConfirmOpen(false);
     setDeleteId(null);

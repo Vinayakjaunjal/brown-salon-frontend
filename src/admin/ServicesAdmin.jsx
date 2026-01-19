@@ -49,7 +49,7 @@ export default function ServicesAdmin() {
 
   const loadServices = async () => {
     const res = await fetch(
-      "https://brown-salon-backend.onrender.com/api/services"
+      "https://brown-salon-backend.onrender.com/api/services",
     );
     const data = await res.json();
     setServices(data);
@@ -121,7 +121,7 @@ export default function ServicesAdmin() {
       `https://brown-salon-backend.onrender.com/api/services/${deleteId}`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     setConfirmOpen(false);

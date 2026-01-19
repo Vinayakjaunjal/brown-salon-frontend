@@ -26,11 +26,11 @@ export default function Admin() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
-      }
+      },
     );
 
     setData((prev) =>
-      prev.map((item) => (item._id === id ? { ...item, status } : item))
+      prev.map((item) => (item._id === id ? { ...item, status } : item)),
     );
   };
 

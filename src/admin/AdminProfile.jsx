@@ -22,7 +22,7 @@ export default function AdminProfile() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     if (res.status === 401) return;
@@ -46,7 +46,7 @@ export default function AdminProfile() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(form),
-      }
+      },
     );
 
     const data = await res.json();
