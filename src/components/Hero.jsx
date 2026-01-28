@@ -3,30 +3,42 @@ import "../styles/Hero.css";
 import heroImg from "../assets/hero-banner-interior.jpg";
 
 function Hero() {
+  const goToAppointment = () => {
+    const section = document.getElementById("appointment");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <section
-      id="home"
-      className="hero-parallax d-flex align-items-center text-center text-light"
-    >
-      <img
-        src={heroImg}
-        alt="Brown Hair Salon Interior"
-        className="hero-bg"
-        loading="eager"
-        fetchpriority="high"
-      />
+    <section id="home" className="premium-hero">
+      <div className="hero-container">
+        <div className="hero-content">
+          <span className="hero-badge">Luxury Salon Experience</span>
 
-      <div className="hero-overlay"></div>
+          <h1 className="hero-title">
+            Elevate Your Style
+            <br />
+            Define Your <span>Confidence</span>
+          </h1>
 
-      <div className="container position-relative">
-        <p className="lead mb-4">
-          Welcome to <span className="text-gold">Brown Hair</span> – The Unisex
-          Salon where beauty meets luxury.
-        </p>
+          <p className="hero-subtitle">
+            Premium hair & beauty services crafted for elegance, confidence, and
+            comfort — just for you.
+          </p>
 
-        <a href="#appointment" className="btn btn-gold btn-sm shadow">
-          Book Appointment
-        </a>
+          <div className="hero-actions">
+            <button className="hero-btn primary" onClick={goToAppointment}>
+              Book Appointment
+            </button>
+            <a href="#services" className="hero-btn secondary">
+              Explore Services
+            </a>
+          </div>
+        </div>
+        <div className="hero-image-wrap">
+          <img src={heroImg} alt="Luxury Salon" className="hero-image" />
+        </div>
       </div>
     </section>
   );

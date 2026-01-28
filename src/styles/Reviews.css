@@ -90,3 +90,17 @@
   background: #d4af37;
   transform: scale(1.25);
 }
+
+.initial-avatar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d4af37, #b8962e);
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  border-radius: 50%;
+  text-transform: uppercase;
+}

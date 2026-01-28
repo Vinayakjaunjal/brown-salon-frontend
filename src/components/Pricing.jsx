@@ -1,5 +1,4 @@
-import { useState } from "react";
-import pricingData from "../data/pricingData";
+import { useEffect, useState } from "react";
 import PricingCard from "./PricingCard";
 import "../styles/Pricing.css";
 
@@ -22,11 +21,19 @@ const Pricing = () => {
   };
 
   const [active, setActive] = useState("All Pricing");
+  const [pricing, setPricing] = useState([]);
 
-  const allPricing = Object.values(pricingData).flat();
+  useEffect(() => {
+    fetch(`${import.meta.env.BACKEND_URL}/api/pricing`)
+      .then((res) => res.json())
+      .then((data) => setPricing(data))
+      .catch((err) => console.error("Pricing fetch error", err));
+  }, []);
 
   const cardsToShow =
-    active === "All Pricing" ? allPricing : pricingData[keyMap[active]] || [];
+    active === "All Pricing"
+      ? pricing
+      : pricing.filter((item) => item.category === keyMap[active]);
 
   return (
     <section id="pricing" className="pricing-section">
@@ -45,15 +52,21 @@ const Pricing = () => {
       </div>
 
       <div className="pricing-grid">
-        {cardsToShow.map((item, index) => (
-          <PricingCard
-            key={index}
-            title={item.title}
-            description={item.description}
-            price={item.price}
-            isPremium={active === "Premium Offers"}
-          />
-        ))}
+        {cardsToShow.length === 0 ? (
+          <p style={{ color: "#999", textAlign: "center" }}>
+            No services available
+          </p>
+        ) : (
+          cardsToShow.map((item) => (
+            <PricingCard
+              key={item._id}
+              title={item.title}
+              description={item.description}
+              price={item.price}
+              isPremium={item.category === "premium"}
+            />
+          ))
+        )}
       </div>
     </section>
   );

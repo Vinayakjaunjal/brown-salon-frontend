@@ -1,50 +1,61 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/Gallery.css";
 
-import glry1 from "../assets/Gallary_mens-1.jpg";
-import glry2 from "../assets/Gallary_ladie-1.jpg";
-import glry3 from "../assets/Gallary_mens-2.jpg";
-import glry4 from "../assets/Gallary_ladie-2.jpg";
-import glry5 from "../assets/Gallary_mens-3.jpg";
-import glry6 from "../assets/Gallary_ladie-3.jpg";
-import glry7 from "../assets/Gallary_mens-4.jpg";
-import glry8 from "../assets/Gallary_ladie-4.jpg";
-import glry9 from "../assets/Gallary_mens-5.jpg";
-import glry10 from "../assets/Gallary_ladie-5.jpg";
-import glry11 from "../assets/Gallary_mens-6.jpg";
-import glry12 from "../assets/Gallary_ladie-6.jpg";
-
-const images = [
-  glry1,
-  glry2,
-  glry3,
-  glry4,
-  glry5,
-  glry6,
-  glry7,
-  glry8,
-  glry9,
-  glry10,
-  glry11,
-  glry12,
-];
-
 const Gallery = () => {
+  const [images, setImages] = useState([]);
   const [lightbox, setLightbox] = useState(null);
+
+  const loopImages = [...images, ...images];
+  const trackRef = useRef(null);
+  const startX = useRef(0);
+  const currentTranslate = useRef(0);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.BACKEND_URL}/api/gallery`)
+      .then((res) => res.json())
+      .then((data) => setImages(data));
+  }, []);
+
+  const handleTouchStart = (e) => {
+    startX.current = e.touches[0].clientX;
+    trackRef.current.style.animationPlayState = "paused";
+  };
+
+  const handleTouchMove = (e) => {
+    const diff = e.touches[0].clientX - startX.current;
+    trackRef.current.style.transform = `translateX(${
+      currentTranslate.current + diff
+    }px)`;
+  };
+
+  const handleTouchEnd = (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = endX - startX.current;
+
+    currentTranslate.current += diff;
+    trackRef.current.style.transform = `translateX(${currentTranslate.current}px)`;
+
+    trackRef.current.style.animationPlayState = "running";
+  };
 
   return (
     <section id="gallery" className="gallery-section">
       <h2 className="gallery-title">Our Gallery</h2>
 
-      <div className="gallery-slider">
-        <div className="gallery-track">
-          {images.map((src, i) => (
-            <div className="gallery-item" key={i}>
+      <div
+        className="gallery-slider"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="gallery-track" ref={trackRef}>
+          {loopImages.map((img) => (
+            <div className="gallery-item" key={img._id}>
               <img
-                src={src}
+                src={`${import.meta.env.BACKEND_URL}${img.image}`}
                 alt=""
-                onClick={() => setLightbox(src)}
                 className="clickable"
+                onClick={() => setLightbox(img.image)}
               />
             </div>
           ))}
@@ -53,7 +64,11 @@ const Gallery = () => {
 
       {lightbox && (
         <div className="lightbox" onClick={() => setLightbox(null)}>
-          <img src={lightbox} alt="" className="lightbox-img" />
+          <img
+            src={`${import.meta.env.BACKEND_URL}${lightbox}`}
+            alt=""
+            className="lightbox-img"
+          />
         </div>
       )}
     </section>

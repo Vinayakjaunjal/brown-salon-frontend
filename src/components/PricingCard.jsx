@@ -15,7 +15,7 @@ const PricingCard = ({ title, description, price, isPremium }) => {
 
       <h4 className="price">₹{price}</h4>
 
-      <button className="book-btn" onClick={goToAppointment}>
+      <button className="book-btn primary" onClick={goToAppointment}>
         BOOK NOW
       </button>
     </div>

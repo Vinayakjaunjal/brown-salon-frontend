@@ -1,99 +1,90 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Reviews.css";
-import review1 from "../assets/Review-ashish.jpg";
-import review2 from "../assets/Review-nikita.jpg";
-import review3 from "../assets/Review-dhanraj.jpg";
-import review4 from "../assets/Review-swayam.jpg";
-import review5 from "../assets/Review-damini.jpg";
-
-const reviews = [
-  {
-    name: "Ashish Bharde",
-    review:
-      "Amazing salon experience! The stylists are very professional and friendly. My haircut was perfect and the ambiance is premium.",
-    rating: 5,
-    image: review1,
-  },
-  {
-    name: "Nikita Chambhare",
-    review: "Very friendly staff and great service. Highly recommended!",
-    rating: 4,
-    image: review2,
-  },
-  {
-    name: "Dhanraj Tikhat",
-    review: "I loved the hair spa. Very relaxing environment.",
-    rating: 5,
-    image: review3,
-  },
-  {
-    name: "Swayam Moon",
-    review: "I loved the hair spa. Very relaxing environment.",
-    rating: 5,
-    image: review4,
-  },
-  {
-    name: "Damini Dahake",
-    review: "I loved the hair spa. Very relaxing environment.",
-    rating: 5,
-    image: review5,
-  },
-];
 
 const Reviews = () => {
+  const [reviews, setReviews] = useState([]);
   const [index, setIndex] = useState(0);
+  const [pause, setPause] = useState(false);
+
   useEffect(() => {
+    fetch(`${import.meta.env.BACKEND_URL}/api/reviews`)
+      .then((res) => res.json())
+      .then((data) => setReviews(data.filter((r) => r.isActive)));
+  }, []);
+
+  useEffect(() => {
+    if (reviews.length === 0 || pause) return;
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % reviews.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [reviews, pause]);
 
-  const nextReview = () => {
-    setIndex((prev) => (prev + 1) % reviews.length);
-  };
-
-  const prevReview = () => {
-    setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
-  };
+  if (reviews.length === 0) return null;
 
   const current = reviews[index];
+
+  const next = () => setIndex((index + 1) % reviews.length);
+  const prev = () => setIndex((index - 1 + reviews.length) % reviews.length);
+
+  const getInitials = (name = "") => {
+    const words = name.trim().split(" ");
+    if (words.length === 1) return words[0][0]?.toUpperCase();
+    return (
+      words[0][0]?.toUpperCase() + words[words.length - 1][0]?.toUpperCase()
+    );
+  };
 
   return (
     <section className="reviews-section">
       <h2 className="reviews-title">What Our Clients Say</h2>
 
-      <div className="review-slider">
-        <button className="arrow-btn left" onClick={prevReview}>
+      <div
+        className="review-slider"
+        onMouseEnter={() => setPause(true)}
+        onMouseLeave={() => setPause(false)}
+      >
+        <button className="arrow-btn left" onClick={prev}>
           ❮
         </button>
+
         <div className="review-card">
           <div className="profile-img-wrapper">
-            <img src={current.image} alt={current.name} />
+            {current.image ? (
+              <img
+                src={`${import.meta.env.BACKEND_URL}${current.image}`}
+                alt={current.name}
+              />
+            ) : (
+              <div className="initial-avatar">{getInitials(current.name)}</div>
+            )}
           </div>
 
           <h3 className="review-name">{current.name}</h3>
           <p className="review-text">"{current.review}"</p>
 
           <div className="stars">
-            {Array(current.rating)
-              .fill()
-              .map((_, i) => (
+            {Array.from(
+              { length: Math.max(0, Number(current.rating) || 0) },
+              (_, i) => (
                 <span key={i}>★</span>
-              ))}
+              ),
+            )}
           </div>
         </div>
-        <button className="arrow-btn right" onClick={nextReview}>
+
+        <button className="arrow-btn right" onClick={next}>
           ❯
         </button>
       </div>
+
       <div className="dots-wrapper">
-        {reviews.map((_, i) => (
+        {reviews.map((review, i) => (
           <span
-            key={i}
+            key={review._id || i}
             className={`dot ${index === i ? "active" : ""}`}
             onClick={() => setIndex(i)}
-          ></span>
+          />
         ))}
       </div>
     </section>
