@@ -49,7 +49,9 @@ export default function AdminHeader({ isMobile, onMenuClick }) {
     }[location.pathname] || "Dashboard";
 
   const fetchNotifications = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/notifications`);
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/notifications`,
+    );
     const data = await res.json();
     setNotifications(data);
   };
@@ -81,7 +83,7 @@ export default function AdminHeader({ isMobile, onMenuClick }) {
   };
 
   const clearAllNotifications = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/notifications`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, {
       method: "DELETE",
     });
     fetchNotifications();

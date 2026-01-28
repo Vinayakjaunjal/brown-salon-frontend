@@ -17,7 +17,7 @@ export default function ForgotPassword() {
 
   const sendLink = async () => {
     const res = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/admin/forgot-password`,
+      `${import.meta.env.VITE_API_URL}/api/admin/forgot-password`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

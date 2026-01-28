@@ -40,7 +40,7 @@ export default function ResetPassword() {
     }
 
     const res = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/admin/reset-password/${token}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/reset-password/${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

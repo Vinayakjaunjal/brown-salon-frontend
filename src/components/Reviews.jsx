@@ -7,7 +7,7 @@ const Reviews = () => {
   const [pause, setPause] = useState(false);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BACKEND_URL}/api/reviews`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/reviews`)
       .then((res) => res.json())
       .then((data) => setReviews(data.filter((r) => r.isActive)));
   }, []);
@@ -52,7 +52,7 @@ const Reviews = () => {
           <div className="profile-img-wrapper">
             {current.image ? (
               <img
-                src={`${import.meta.env.BACKEND_URL}${current.image}`}
+                src={`${import.meta.env.VITE_API_URL}${current.image}`}
                 alt={current.name}
               />
             ) : (

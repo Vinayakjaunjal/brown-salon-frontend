@@ -32,12 +32,12 @@ export default function AppointmentForm() {
 
     try {
       const apRes = await fetch(
-        `${import.meta.env.BACKEND_URL}/api/appointments?date=${selectedDate}`,
+        `${import.meta.env.VITE_API_URL}/api/appointments?date=${selectedDate}`,
       );
       const appointments = await apRes.json();
 
       const slRes = await fetch(
-        `${import.meta.env.BACKEND_URL}/api/slots?date=${selectedDate}`,
+        `${import.meta.env.VITE_API_URL}/api/slots?date=${selectedDate}`,
       );
       const slots = await slRes.json();
 
@@ -70,7 +70,7 @@ export default function AppointmentForm() {
     if (!formData.date) return;
 
     fetch(
-      `${import.meta.env.BACKEND_URL}/api/appointments?date=${formData.date}`,
+      `${import.meta.env.VITE_API_URL}/api/appointments?date=${formData.date}`,
     )
       .then((res) => res.json())
       .then((data) => {
@@ -78,7 +78,7 @@ export default function AppointmentForm() {
         setAppointments(approved);
       });
 
-    fetch(`${import.meta.env.BACKEND_URL}/api/slots?date=${formData.date}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/slots?date=${formData.date}`)
       .then((res) => res.json())
       .then((data) => {
         const booked = data
@@ -102,7 +102,7 @@ export default function AppointmentForm() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.BACKEND_URL}/api/appointments`,
+        `${import.meta.env.VITE_API_URL}/api/appointments`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

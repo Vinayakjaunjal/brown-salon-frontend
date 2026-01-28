@@ -25,7 +25,7 @@ export default function AdminLogin() {
   const login = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.BACKEND_URL}/api/admin/login`,
+        `${import.meta.env.VITE_API_URL}/api/admin/login`,
         {
           method: "POST",
           headers: {

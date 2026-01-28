@@ -23,7 +23,7 @@ export default function Customers() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch(`${import.meta.env.BACKEND_URL}/api/appointments`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/appointments`)
       .then((res) => res.json())
       .then((data) => {
         const map = {};

@@ -13,14 +13,14 @@ export default function Admin() {
     }
 
     // 📥 Fetch appointments
-    fetch(`${import.meta.env.BACKEND_URL}/api/appointments`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/appointments`)
       .then((res) => res.json())
       .then(setData)
       .catch(() => alert("Failed to load appointments"));
   }, []);
 
   const updateStatus = async (id, status) => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/appointments/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/appointments/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),

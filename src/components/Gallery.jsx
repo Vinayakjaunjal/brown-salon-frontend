@@ -11,7 +11,7 @@ const Gallery = () => {
   const currentTranslate = useRef(0);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BACKEND_URL}/api/gallery`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/gallery`)
       .then((res) => res.json())
       .then((data) => setImages(data));
   }, []);
@@ -52,7 +52,7 @@ const Gallery = () => {
           {loopImages.map((img) => (
             <div className="gallery-item" key={img._id}>
               <img
-                src={`${import.meta.env.BACKEND_URL}${img.image}`}
+                src={`${import.meta.env.VITE_API_URL}${img.image}`}
                 alt=""
                 className="clickable"
                 onClick={() => setLightbox(img.image)}
@@ -65,7 +65,7 @@ const Gallery = () => {
       {lightbox && (
         <div className="lightbox" onClick={() => setLightbox(null)}>
           <img
-            src={`${import.meta.env.BACKEND_URL}${lightbox}`}
+            src={`${import.meta.env.VITE_API_URL}${lightbox}`}
             alt=""
             className="lightbox-img"
           />

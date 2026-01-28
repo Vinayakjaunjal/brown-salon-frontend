@@ -47,7 +47,7 @@ export default function AdminReviews() {
   };
 
   const loadReviews = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/reviews`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`);
     const data = await res.json();
     setReviews(data);
   };
@@ -69,8 +69,8 @@ export default function AdminReviews() {
     if (image) fd.append("image", image);
 
     const url = editId
-      ? `${import.meta.env.BACKEND_URL}/api/reviews/${editId}`
-      : `${import.meta.env.BACKEND_URL}/api/reviews`;
+      ? `${import.meta.env.VITE_API_URL}/api/reviews/${editId}`
+      : `${import.meta.env.VITE_API_URL}/api/reviews`;
 
     await fetch(url, { method: editId ? "PUT" : "POST", body: fd });
 
@@ -86,7 +86,7 @@ export default function AdminReviews() {
   const editReview = (r) => {
     setForm({ name: r.name, review: r.review, rating: r.rating });
     setEditId(r._id);
-    if (r.image) setPreview(`${import.meta.env.BACKEND_URL}${r.image}`);
+    if (r.image) setPreview(`${import.meta.env.VITE_API_URL}${r.image}`);
   };
 
   const askDelete = (id) => {
@@ -95,7 +95,7 @@ export default function AdminReviews() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/reviews/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${deleteId}`, {
       method: "DELETE",
     });
     setConfirmOpen(false);
@@ -105,7 +105,7 @@ export default function AdminReviews() {
   };
 
   const toggleReview = async (id) => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/reviews/${id}/toggle`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${id}/toggle`, {
       method: "PUT",
     });
     loadReviews();
@@ -175,7 +175,7 @@ export default function AdminReviews() {
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 {r.image ? (
                   <img
-                    src={`${import.meta.env.BACKEND_URL}${r.image}`}
+                    src={`${import.meta.env.VITE_API_URL}${r.image}`}
                     alt=""
                     width={50}
                     height={50}
@@ -249,7 +249,7 @@ export default function AdminReviews() {
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 {r.image ? (
                   <img
-                    src={`${import.meta.env.BACKEND_URL}${r.image}`}
+                    src={`${import.meta.env.VITE_API_URL}${r.image}`}
                     alt=""
                     width={60}
                     height={60}

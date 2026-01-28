@@ -44,7 +44,7 @@ export default function Dashboard() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    fetch(`${import.meta.env.BACKEND_URL}/api/appointments`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/appointments`)
       .then((res) => res.json())
       .then(setData);
   }, []);
@@ -64,7 +64,7 @@ export default function Dashboard() {
     .slice(0, 5);
 
   const updateStatus = async (id, status) => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/appointments/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/appointments/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),

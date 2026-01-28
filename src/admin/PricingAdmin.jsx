@@ -64,7 +64,7 @@ export default function PricingAdmin() {
   };
 
   const loadPricing = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/pricing`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/pricing`);
     const data = await res.json();
     setPricing(data);
   };
@@ -83,8 +83,8 @@ export default function PricingAdmin() {
     }
 
     const url = editId
-      ? `${import.meta.env.BACKEND_URL}/api/pricing/${editId}`
-      : `${import.meta.env.BACKEND_URL}/api/pricing`;
+      ? `${import.meta.env.VITE_API_URL}/api/pricing/${editId}`
+      : `${import.meta.env.VITE_API_URL}/api/pricing`;
 
     await fetch(url, {
       method: editId ? "PUT" : "POST",
@@ -109,7 +109,7 @@ export default function PricingAdmin() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/pricing/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/pricing/${deleteId}`, {
       method: "DELETE",
     });
     setConfirmOpen(false);

@@ -48,7 +48,7 @@ export default function ServicesAdmin() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const loadServices = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/services`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/services`);
     const data = await res.json();
     setServices(data);
   };
@@ -85,8 +85,8 @@ export default function ServicesAdmin() {
     }
 
     const url = editId
-      ? `${import.meta.env.BACKEND_URL}/api/services/${editId}`
-      : `${import.meta.env.BACKEND_URL}/api/services`;
+      ? `${import.meta.env.VITE_API_URL}/api/services/${editId}`
+      : `${import.meta.env.VITE_API_URL}/api/services`;
 
     await fetch(url, {
       method: editId ? "PUT" : "POST",
@@ -115,7 +115,7 @@ export default function ServicesAdmin() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/services/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/services/${deleteId}`, {
       method: "DELETE",
     });
 

@@ -69,10 +69,10 @@ export default function Slots() {
     }
 
     const apRes = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/appointments?date=${date}`,
+      `${import.meta.env.VITE_API_URL}/api/appointments?date=${date}`,
     );
     const slRes = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/slots?date=${date}`,
+      `${import.meta.env.VITE_API_URL}/api/slots?date=${date}`,
     );
 
     setAppointments(await apRes.json());
@@ -129,7 +129,7 @@ export default function Slots() {
   };
 
   const saveSlots = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/slots`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/slots`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date, slots }),

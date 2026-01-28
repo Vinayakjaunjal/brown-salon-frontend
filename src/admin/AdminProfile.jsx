@@ -17,7 +17,7 @@ export default function AdminProfile() {
 
   const loadProfile = async () => {
     const res = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/admin/profile`,
+      `${import.meta.env.VITE_API_URL}/api/admin/profile`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ export default function AdminProfile() {
 
   const updateProfile = async () => {
     const res = await fetch(
-      `${import.meta.env.BACKEND_URL}/api/admin/profile`,
+      `${import.meta.env.VITE_API_URL}/api/admin/profile`,
       {
         method: "PUT",
         headers: {

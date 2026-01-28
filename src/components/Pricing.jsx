@@ -24,7 +24,7 @@ const Pricing = () => {
   const [pricing, setPricing] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BACKEND_URL}/api/pricing`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/pricing`)
       .then((res) => res.json())
       .then((data) => setPricing(data))
       .catch((err) => console.error("Pricing fetch error", err));

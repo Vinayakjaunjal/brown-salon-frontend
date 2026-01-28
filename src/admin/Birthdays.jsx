@@ -77,7 +77,7 @@ export default function Birthdays() {
 
   // Load birthday customers
   const loadCustomers = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/birthdays`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/birthdays`);
     const data = await res.json();
     setCustomers(data);
   };
@@ -108,7 +108,7 @@ export default function Birthdays() {
       return;
     }
 
-    await fetch(`${import.meta.env.BACKEND_URL}/api/birthdays`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/birthdays`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -123,7 +123,7 @@ export default function Birthdays() {
 
   // Send Wish Function
   const sendWish = async (customer) => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/birthdays/wish`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/birthdays/wish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -137,7 +137,7 @@ export default function Birthdays() {
 
   // Delete Birthday Button
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/birthdays/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/birthdays/${deleteId}`, {
       method: "DELETE",
     });
 

@@ -45,7 +45,7 @@ export default function AdminGallery() {
   };
 
   const loadGallery = async () => {
-    const res = await fetch(`${import.meta.env.BACKEND_URL}/api/gallery`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/gallery`);
     const data = await res.json();
     setImages(data);
   };
@@ -63,7 +63,7 @@ export default function AdminGallery() {
     const fd = new FormData();
     fd.append("image", file);
 
-    await fetch(`${import.meta.env.BACKEND_URL}/api/gallery`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/gallery`, {
       method: "POST",
       body: fd,
     });
@@ -79,7 +79,7 @@ export default function AdminGallery() {
   };
 
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.BACKEND_URL}/api/gallery/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/gallery/${deleteId}`, {
       method: "DELETE",
     });
 
@@ -98,7 +98,7 @@ export default function AdminGallery() {
 
     setImages(items);
 
-    await fetch(`${import.meta.env.BACKEND_URL}/api/gallery/reorder`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/gallery/reorder`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items }),
@@ -165,7 +165,7 @@ export default function AdminGallery() {
                         }}
                       >
                         <img
-                          src={`${import.meta.env.BACKEND_URL}${img.image}`}
+                          src={`${import.meta.env.VITE_API_URL}${img.image}`}
                           alt=""
                           style={{
                             width: "100%",
