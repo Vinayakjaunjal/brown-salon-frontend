@@ -69,6 +69,7 @@ function App() {
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="customers" element={<Customers />} />
           <Route path="slots" element={<Slots />} />
+          <Route path="birthdays" element={<Birthdays />} />
         </Route>
       </Routes>
     </BrowserRouter>
