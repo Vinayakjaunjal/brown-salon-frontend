@@ -7,27 +7,27 @@
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/#services</loc>
+    <loc>https://brown-salon-frontend.vercel.app/services</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/#pricing</loc>
+    <loc>https://brown-salon-frontend.vercel.app/pricing</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/#gallery</loc>
+    <loc>https://brown-salon-frontend.vercel.app/gallery</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/#reviews</loc>
+    <loc>https://brown-salon-frontend.vercel.app/reviews</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/#appointment</loc>
+    <loc>https://brown-salon-frontend.vercel.app/appointment</loc>
     <priority>1.0</priority>
   </url>
 
