@@ -7,11 +7,6 @@
   </url>
 
   <url>
-    <loc>https://brown-salon-frontend.vercel.app/admin-login</loc>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
     <loc>https://brown-salon-frontend.vercel.app/#services</loc>
     <priority>0.8</priority>
   </url>
