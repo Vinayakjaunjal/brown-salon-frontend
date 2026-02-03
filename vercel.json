@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://brownsalon.co.in/$1",
+      "permanent": true
+    }
+  ]
 }
