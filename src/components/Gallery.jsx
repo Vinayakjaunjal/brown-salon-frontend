@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "../styles/Gallery.css";
+import { Box, Typography } from "@mui/material";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -23,9 +23,7 @@ const Gallery = () => {
 
   const handleTouchMove = (e) => {
     const diff = e.touches[0].clientX - startX.current;
-    trackRef.current.style.transform = `translateX(${
-      currentTranslate.current + diff
-    }px)`;
+    trackRef.current.style.transform = `translateX(${currentTranslate.current + diff}px)`;
   };
 
   const handleTouchEnd = (e) => {
@@ -34,44 +32,144 @@ const Gallery = () => {
 
     currentTranslate.current += diff;
     trackRef.current.style.transform = `translateX(${currentTranslate.current}px)`;
-
     trackRef.current.style.animationPlayState = "running";
   };
 
   return (
-    <section id="gallery" className="gallery-section">
-      <h2 className="gallery-title">Our Gallery</h2>
+    <Box
+      id="gallery"
+      sx={{
+        padding: "40px 0",
+      }}
+    >
+      <Typography
+        sx={{
+          textAlign: "center",
+          marginBottom: "20px",
+          fontSize: "30px",
+          fontWeight: 700,
+          color: "#111",
+          fontFamily: "inherit",
+        }}
+      >
+        Our Gallery
+      </Typography>
 
-      <div
-        className="gallery-slider"
+      <Box
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        sx={{
+          width: "100%",
+          overflow: "hidden",
+          overflowX: "auto",
+          scrollBehavior: "smooth",
+          cursor: "grab",
+          position: "relative",
+
+          "&:active": {
+            cursor: "grabbing",
+          },
+
+          "&:hover .galleryTrack": {
+            animationPlayState: "paused",
+          },
+        }}
       >
-        <div className="gallery-track" ref={trackRef}>
+        <Box
+          ref={trackRef}
+          className="galleryTrack"
+          sx={{
+            display: "flex",
+            gap: "8px",
+            width: "max-content",
+            animation: "scrollLeft 35s linear infinite",
+          }}
+        >
           {loopImages.map((img) => (
-            <div className="gallery-item" key={img._id}>
-              <img
+            <Box
+              key={img._id}
+              sx={{
+                width: "260px",
+                borderRadius: "4px",
+                overflow: "hidden",
+                flexShrink: 0,
+              }}
+            >
+              <Box
+                component="img"
                 src={`${import.meta.env.VITE_API_URL}${img.image}`}
                 alt=""
-                className="clickable"
                 onClick={() => setLightbox(img.image)}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "2px",
+                  cursor: "pointer",
+                }}
               />
-            </div>
+            </Box>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {lightbox && (
-        <div className="lightbox" onClick={() => setLightbox(null)}>
-          <img
+        <Box
+          onClick={() => setLightbox(null)}
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.9)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 999,
+            padding: "20px",
+          }}
+        >
+          <Box
+            component="img"
             src={`${import.meta.env.VITE_API_URL}${lightbox}`}
             alt=""
-            className="lightbox-img"
+            sx={{
+              maxWidth: "90%",
+              maxHeight: "90%",
+              borderRadius: "8px",
+              boxShadow: "0 0 25px rgba(255,215,0,0.4)",
+              animation: "popIn 0.25s ease",
+            }}
           />
-        </div>
+        </Box>
       )}
-    </section>
+
+      <style>
+        {`
+          @keyframes scrollLeft {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          @keyframes popIn {
+            0% {
+              transform: scale(0.85);
+              opacity: 0;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+        `}
+      </style>
+    </Box>
   );
 };
 

@@ -25,14 +25,12 @@ export default function AdminGallery() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Snackbar
   const [snack, setSnack] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
-  // Delete Dialog
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 

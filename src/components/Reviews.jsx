@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/Reviews.css";
+import { Box, Typography } from "@mui/material";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -14,9 +14,11 @@ const Reviews = () => {
 
   useEffect(() => {
     if (reviews.length === 0 || pause) return;
+
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % reviews.length);
     }, 3000);
+
     return () => clearInterval(interval);
   }, [reviews, pause]);
 
@@ -36,58 +38,206 @@ const Reviews = () => {
   };
 
   return (
-    <section className="reviews-section">
-      <h2 className="reviews-title">What Our Clients Say</h2>
+    <Box
+      sx={{
+        padding: "60px 0",
+        background: "#f7f7f7",
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: "32px",
+          fontWeight: 700,
+          marginBottom: "40px",
+          fontFamily: "inherit",
+          color: "#111",
+        }}
+      >
+        What Our Clients Say
+      </Typography>
 
-      <div
-        className="review-slider"
+      {/* SLIDER */}
+      <Box
         onMouseEnter={() => setPause(true)}
         onMouseLeave={() => setPause(false)}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
       >
-        <button className="arrow-btn left" onClick={prev}>
+        {/* LEFT ARROW */}
+        <Box
+          component="button"
+          onClick={prev}
+          sx={{
+            color: "#0b0101",
+            border: "none",
+            fontSize: "24px",
+            width: "45px",
+            height: "45px",
+            borderRadius: "50%",
+            cursor: "pointer",
+            transition: "0.3s",
+            background: "transparent",
+          }}
+        >
           ❮
-        </button>
+        </Box>
 
-        <div className="review-card">
-          <div className="profile-img-wrapper">
+        {/* REVIEW CARD */}
+        <Box
+          sx={{
+            width: "450px",
+            background: "#fff",
+            padding: "30px 25px",
+            borderRadius: "18px",
+            boxShadow: "0 5px 25px rgba(0,0,0,0.15)",
+            margin: "0 25px",
+            transition: "0.4s ease",
+
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {/* PROFILE IMAGE / INITIAL */}
+          <Box
+            sx={{
+              width: "90px",
+              height: "90px",
+              margin: "0 auto 15px",
+              borderRadius: "50%",
+              border: "4px solid #d4af37",
+              overflow: "hidden",
+
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {current.image ? (
-              <img
+              <Box
+                component="img"
                 src={`${import.meta.env.VITE_API_URL}${current.image}`}
                 alt={current.name}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
               />
             ) : (
-              <div className="initial-avatar">{getInitials(current.name)}</div>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  background: "linear-gradient(135deg, #d4af37, #b8962e)",
+                  color: "#111",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "32px",
+                  fontWeight: 700,
+                  borderRadius: "50%",
+                  textTransform: "uppercase",
+                }}
+              >
+                {getInitials(current.name)}
+              </Box>
             )}
-          </div>
+          </Box>
 
-          <h3 className="review-name">{current.name}</h3>
-          <p className="review-text">"{current.review}"</p>
+          <Typography
+            sx={{
+              fontSize: "20px",
+              fontWeight: 600,
+              marginTop: "10px",
+              fontFamily: "inherit",
+            }}
+          >
+            {current.name}
+          </Typography>
 
-          <div className="stars">
+          <Typography
+            sx={{
+              color: "#555",
+              fontStyle: "italic",
+              margin: "15px 0",
+              fontFamily: "inherit",
+            }}
+          >
+            "{current.review}"
+          </Typography>
+
+          {/* STARS */}
+          <Box>
             {Array.from(
               { length: Math.max(0, Number(current.rating) || 0) },
               (_, i) => (
-                <span key={i}>★</span>
+                <Box
+                  key={i}
+                  component="span"
+                  sx={{
+                    color: "#d4af37",
+                    fontSize: "20px",
+                  }}
+                >
+                  ★
+                </Box>
               ),
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
-        <button className="arrow-btn right" onClick={next}>
+        {/* RIGHT ARROW */}
+        <Box
+          component="button"
+          onClick={next}
+          sx={{
+            color: "#0b0101",
+            border: "none",
+            fontSize: "24px",
+            width: "45px",
+            height: "45px",
+            borderRadius: "50%",
+            cursor: "pointer",
+            transition: "0.3s",
+            background: "transparent",
+          }}
+        >
           ❯
-        </button>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="dots-wrapper">
+      {/* DOTS */}
+      <Box
+        sx={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+        }}
+      >
         {reviews.map((review, i) => (
-          <span
+          <Box
             key={review._id || i}
-            className={`dot ${index === i ? "active" : ""}`}
             onClick={() => setIndex(i)}
+            sx={{
+              width: "12px",
+              height: "12px",
+              background: index === i ? "#d4af37" : "#ccc",
+              borderRadius: "50%",
+              cursor: "pointer",
+              transition: "0.3s",
+              transform: index === i ? "scale(1.25)" : "scale(1)",
+            }}
           />
         ))}
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 };
 

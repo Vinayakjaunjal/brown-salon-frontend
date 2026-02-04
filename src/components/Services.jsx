@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import ServiceCard from "./ServiceCard";
-import "../styles/Services.css";
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -12,11 +12,51 @@ const Services = () => {
   }, []);
 
   return (
-    <section id="services" className="services-section">
-      <div className="services-container">
-        <h2 className="section-title">Our Services</h2>
+    <Box
+      id="services"
+      sx={{
+        padding: "60px 80px",
+        textAlign: "center",
+        background: "#fff",
+        color: "#111",
 
-        <div className="services-grid">
+        "@media (max-width:600px)": {
+          padding: "40px 20px",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: "1200px",
+          margin: "auto",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "34px",
+            fontWeight: 700,
+            marginBottom: "35px",
+          }}
+        >
+          Our Services
+        </Typography>
+
+        <Box
+          sx={{
+            display: "grid",
+            justifyContent: "center",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "30px",
+
+            "@media (max-width:992px)": {
+              gridTemplateColumns: "repeat(2, 1fr)",
+            },
+
+            "@media (max-width:600px)": {
+              gridTemplateColumns: "repeat(1, 1fr)",
+            },
+          }}
+        >
           {services.map((item) => (
             <ServiceCard
               key={item._id}
@@ -25,9 +65,9 @@ const Services = () => {
               desc={item.desc}
             />
           ))}
-        </div>
-      </div>
-    </section>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
