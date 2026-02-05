@@ -1,15 +1,3 @@
 {
-  "redirects": [
-    { "source": "/(.*)", "destination": "/" },
-    {
-      "source": "http://brownsalon.co.in/:path*",
-      "destination": "https://brownsalon.co.in/:path*",
-      "permanent": true
-    },
-    {
-      "source": "https://www.brownsalon.co.in/:path*",
-      "destination": "https://brownsalon.co.in/:path*",
-      "permanent": true
-    }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
