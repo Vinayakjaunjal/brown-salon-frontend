@@ -1,12 +1,13 @@
 {
   "redirects": [
     {
-      "source": "http://brownsalon.co.in/:path*",
-      "destination": "https://brownsalon.co.in/:path*",
-      "permanent": true
-    },
-    {
-      "source": "https://www.brownsalon.co.in/:path*",
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.brownsalon.co.in"
+        }
+      ],
       "destination": "https://brownsalon.co.in/:path*",
       "permanent": true
     }
