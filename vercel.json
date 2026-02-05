@@ -1,17 +1,3 @@
 {
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.brownsalon.co.in"
-        }
-      ],
-      "destination": "https://brownsalon.co.in/:path*",
-      "permanent": true
-    }
-  ],
-
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
