@@ -16,6 +16,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
   const { token } = useParams();
+  console.log("TOKEN:", tokenS);
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");

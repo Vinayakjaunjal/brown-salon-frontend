@@ -1,7 +1,5 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-
-// ================= COMMON =================
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import RouteLoader from "./components/common/RouteLoader";
@@ -40,14 +38,12 @@ const AdminLogin = lazy(() => import("./admin/AdminLogin"));
 const AdminForgot = lazy(() => import("./admin/ForgotPassword"));
 const AdminReset = lazy(() => import("./admin/ResetPassword"));
 
-// ================= MAIN WRAPPER =================
 function LayoutWrapper() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-default">
-      {/* Navbar only for user */}
       {!isAdmin && <Navbar />}
 
       <main
@@ -59,7 +55,6 @@ function LayoutWrapper() {
           <ScrollToTop />
 
           <Routes>
-            {/* ================= USER ROUTES ================= */}
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPasswordUser />} />
@@ -69,19 +64,15 @@ function LayoutWrapper() {
             <Route path="/slots/:id" element={<Slots />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/success" element={<Success />} />
-
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/gallery" element={<Gallery />} />
-
             <Route path="/profile" element={<Profile />} />
 
-            {/* ================= ADMIN AUTH ================= */}
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin-forgot" element={<AdminForgot />} />
             <Route path="/admin-reset/:token" element={<AdminReset />} />
 
-            {/* ================= ADMIN PANEL ================= */}
             <Route
               path="/admin/*"
               element={
@@ -105,7 +96,6 @@ function LayoutWrapper() {
         </Suspense>
       </main>
 
-      {/* Footer only for user */}
       {!isAdmin && <Footer />}
 
       <GlobalLoader />
@@ -113,7 +103,6 @@ function LayoutWrapper() {
   );
 }
 
-// ================= APP ROOT =================
 export default function App() {
   return <LayoutWrapper />;
 }
