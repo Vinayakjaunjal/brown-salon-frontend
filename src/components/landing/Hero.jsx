@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeSticker } from "../illustrations/SalonIllustrations";
+import heroImg1 from "../../assets/hero-img-1.webp";
+import heroImg2 from "../../assets/hero-img-2.webp";
 
 const trustStats = [
   { label: "Customer Rating", value: "4.9/5" },
@@ -68,17 +70,11 @@ export default function Hero() {
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div className="col-span-2 rounded-2xl overflow-hidden shadow-soft h-52 sm:h-64">
-            <img
-              src="https://images.pexels.com/photos/7697394/pexels-photo-7697394.jpeg"
-              className="w-full h-full object-cover"
-            />
+            <img src={heroImg1} className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-soft h-36 sm:h-40 bg-white">
-            <img
-              src="https://images.pexels.com/photos/3993133/pexels-photo-3993133.jpeg"
-              className="w-full h-full object-cover"
-            />
+            <img src={heroImg2} className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl shadow-soft h-36 sm:h-40 bg-white p-2">

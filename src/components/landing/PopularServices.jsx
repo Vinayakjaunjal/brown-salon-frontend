@@ -1,29 +1,29 @@
 import React from "react";
+import haircut from "../../assets/pop-img-hair.webp";
+import beard from "../../assets/pop-img-beard.webp";
+import facial from "../../assets/pop-img-facial.webp";
+import spa from "../../assets/pop-img-spa.webp";
 
 const featuredServices = [
   {
     title: "Haircut & Styling",
     description: "Professional haircut and modern styling at your home.",
-    image:
-      "https://images.pexels.com/photos/1319461/pexels-photo-1319461.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: haircut,
   },
   {
     title: "Beard Grooming",
     description: "Clean beard shaping and premium grooming experience.",
-    image:
-      "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: beard,
   },
   {
     title: "Facial & Skin Care",
     description: "Relaxing facial treatments for glowing healthy skin.",
-    image:
-      "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: facial,
   },
   {
     title: "Hair Spa Treatment",
     description: "Deep nourishment and scalp care for strong hair.",
-    image:
-      "https://images.pexels.com/photos/853427/pexels-photo-853427.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: spa,
   },
 ];
 
