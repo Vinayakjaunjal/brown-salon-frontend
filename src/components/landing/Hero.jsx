@@ -70,11 +70,26 @@ export default function Hero() {
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div className="col-span-2 rounded-2xl overflow-hidden shadow-soft h-52 sm:h-64">
-            <img src={heroImg1} className="w-full h-full object-cover" />
+            <img
+              src={heroImg1}
+              alt="Salon services"
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              width="800"
+              height="600"
+            />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-soft h-36 sm:h-40 bg-white">
-            <img src={heroImg2} className="w-full h-full object-cover" />
+            <img
+              src={heroImg2}
+              alt="Hair styling"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              width="400"
+              height="300"
+            />
           </div>
 
           <div className="rounded-2xl shadow-soft h-36 sm:h-40 bg-white p-2">

@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import whyImg1 from "../../assets/why-chose-img1.webp";
+import whyImg2 from "../../assets/why-chose-img2.webp";
 
 export default function WhyChooseUs() {
   const nav = useNavigate();
@@ -38,19 +40,23 @@ export default function WhyChooseUs() {
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl overflow-hidden h-36 sm:h-44">
             <img
-              src="https://images.pexels.com/photos/3993446/pexels-photo-3993446.jpeg?auto=compress&cs=tinysrgb&w=1000"
+              src={whyImg1}
               alt="Salon service"
               className="w-full h-full object-cover"
               loading="lazy"
+              width="400"
+              height="300"
             />
           </div>
 
           <div className="rounded-2xl overflow-hidden h-36 sm:h-44">
             <img
-              src="https://images.pexels.com/photos/3993322/pexels-photo-3993322.jpeg?auto=compress&cs=tinysrgb&w=1000"
+              src={whyImg2}
               alt="Professional makeup"
               className="w-full h-full object-cover"
               loading="lazy"
+              width="400"
+              height="300"
             />
           </div>
 

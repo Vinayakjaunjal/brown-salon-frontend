@@ -18,6 +18,9 @@ function ServiceImage({ service }) {
       src={imageSrc}
       alt={service.title}
       className="h-36 w-full rounded-xl object-cover border border-amber-200/60"
+      loading="lazy"
+      width="300"
+      height="200"
     />
   );
 }

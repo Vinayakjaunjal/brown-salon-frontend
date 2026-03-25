@@ -38,7 +38,14 @@ export default function PopularServices() {
             key={service.title}
             className="rounded-2xl overflow-hidden shadow-soft"
           >
-            <img src={service.image} className="h-44 w-full object-cover" />
+            <img
+              src={service.image}
+              alt={service.title}
+              className="h-44 w-full object-cover"
+              loading="lazy"
+              width="400"
+              height="300"
+            />
 
             <div className="p-4">
               <h3 className="font-semibold text-lg text-gray-900">
