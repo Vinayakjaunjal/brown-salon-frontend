@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { clearAuthSession } from "../utils/auth";
-import logo from "../assets/brown-logo.png";
+import logo from "../assets/brown-logo.webp";
 
 const linkBaseClass = "text-sm font-medium transition-colors duration-200";
 

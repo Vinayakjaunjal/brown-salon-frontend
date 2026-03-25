@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import AdminLogo from "../assets/brown-logo.png";
+import AdminLogo from "../assets/brown-logo.webp";
 import {
   Box,
   Paper,

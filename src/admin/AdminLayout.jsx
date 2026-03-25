@@ -23,7 +23,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import CakeIcon from "@mui/icons-material/Cake";
 import LogoutIcon from "@mui/icons-material/Logout";
-import logo from "../assets/brown-logo-Side.png";
+import logo from "../assets/brown-logo-Side.webp";
 import Celebration from "@mui/icons-material/Celebration";
 
 const SIDEBAR_WIDTH = 260;
