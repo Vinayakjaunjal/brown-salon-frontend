@@ -86,7 +86,7 @@ export default function Hero() {
               src={heroImg2}
               alt="Hair styling"
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
               width="400"
               height="500"
             />

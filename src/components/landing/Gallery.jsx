@@ -16,10 +16,7 @@ export default function Gallery() {
       .catch(() => setImages([]));
   }, []);
 
-  // Duplicate for infinite scroll
   const loopImages = [...images, ...images];
-
-  // ================= TOUCH EVENTS =================
   const handleTouchStart = (e) => {
     startX.current = e.touches[0].clientX;
     if (trackRef.current) {
@@ -48,7 +45,6 @@ export default function Gallery() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">Our Gallery</h2>
 
-        {/* SCROLLER */}
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -72,13 +68,11 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* EMPTY STATE */}
         {images.length === 0 && (
           <p className="text-center text-gray-500 mt-6">No images available</p>
         )}
       </div>
 
-      {/* LIGHTBOX */}
       {lightbox && (
         <div
           onClick={() => setLightbox(null)}
@@ -91,7 +85,6 @@ export default function Gallery() {
         </div>
       )}
 
-      {/* ANIMATION */}
       <style>{`
         .galleryTrack {
           animation: scrollLeft 60s linear infinite;
