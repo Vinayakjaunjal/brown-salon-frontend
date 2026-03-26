@@ -75,8 +75,8 @@ export default function Hero() {
               alt="Salon services"
               className="w-full h-full object-cover"
               loading="eager"
-              fetchPriority="high"
-              width="800"
+              fetchpriority="high"
+              width="900"
               height="600"
             />
           </div>
@@ -86,10 +86,9 @@ export default function Hero() {
               src={heroImg2}
               alt="Hair styling"
               className="w-full h-full object-cover"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               width="400"
-              height="300"
+              height="500"
             />
           </div>
 
