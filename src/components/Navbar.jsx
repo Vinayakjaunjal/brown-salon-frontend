@@ -4,12 +4,9 @@ import { Menu, X } from "lucide-react";
 import { clearAuthSession } from "../utils/auth";
 import logo from "../assets/brown-logo.webp";
 
-const linkBaseClass = "text-sm font-medium transition-colors duration-200";
-
 export default function Navbar() {
   const nav = useNavigate();
   const location = useLocation();
-
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -19,6 +16,8 @@ export default function Navbar() {
     const items = [
       { to: "/", label: "Home" },
       { to: "/services", label: "Services" },
+      { to: "/about", label: "About" },
+      { to: "/contact", label: "Contact" },
     ];
 
     if (token && role === "user") {
@@ -39,63 +38,75 @@ export default function Navbar() {
       handleLogout();
       return;
     }
-
     setMobileOpen(false);
     nav("/login");
   };
 
   const isActive = (path) => {
-    if (path === "/") {
-      return location.pathname === "/";
-    }
-
+    if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center">
               <img
                 src={logo}
                 alt="Brown Salon"
-                className="w-full h-full object-contain"
+                width="64"
+                height="64"
+                className="object-contain"
               />
             </div>
 
             <div>
-              <p className="font-bold leading-none text-gray-900">
+              <p className="font-bold text-gray-900 leading-none">
                 Brown Salon
               </p>
-              <p className="text-[10px] text-gray-500 tracking-wide uppercase">
-                Premium Salon
+              <p className="text-[10px] text-gray-500 uppercase tracking-wide">
+                Premium Experience
               </p>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`${linkBaseClass} ${
+                className={`relative text-sm font-medium transition ${
                   isActive(item.to)
-                    ? "text-gray-900"
-                    : "text-gray-500 hover:text-gray-900"
+                    ? "text-black"
+                    : "text-gray-500 hover:text-black"
                 }`}
               >
                 {item.label}
+
+                <span
+                  className={`absolute left-0 -bottom-1 h-[2px] bg-amber-400 transition-all duration-300 ${
+                    isActive(item.to) ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
               </Link>
             ))}
 
             <button
+              onClick={() => nav("/services")}
+              className="px-5 py-2 rounded-xl bg-amber-400 text-black font-semibold hover:bg-amber-500 transition"
+            >
+              Appointment
+            </button>
+
+            <button
               onClick={handleAuthAction}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+              className={`px-4 py-2 rounded-xl text-sm font-semibold ${
                 token
                   ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                  : "bg-amber-400 hover:bg-amber-500 text-black"
+                  : "border border-gray-300 text-gray-700 hover:bg-gray-100"
               }`}
             >
               {token ? "Logout" : "Login"}
@@ -103,24 +114,19 @@ export default function Navbar() {
           </nav>
 
           <button
-            className="md:hidden p-2 rounded-lg border border-gray-200 text-gray-700"
+            className="md:hidden p-2 rounded-lg border border-gray-200"
             onClick={() => setMobileOpen((prev) => !prev)}
-            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
           >
-            {mobileOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            mobileOpen ? "max-h-80 pb-4" : "max-h-0"
+            mobileOpen ? "max-h-96 pb-4" : "max-h-0"
           }`}
         >
-          <div className="rounded-2xl border border-gray-100 bg-white shadow-md p-3 space-y-2">
+          <div className="mt-3 rounded-2xl border border-gray-100 bg-white shadow-md p-4 space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.to}
@@ -137,12 +143,18 @@ export default function Navbar() {
             ))}
 
             <button
+              onClick={() => {
+                nav("/services");
+                setMobileOpen(false);
+              }}
+              className="w-full mt-2 px-4 py-2 rounded-lg bg-amber-400 text-black font-semibold"
+            >
+              Book Appointment
+            </button>
+
+            <button
               onClick={handleAuthAction}
-              className={`w-full mt-1 px-3 py-2 rounded-lg text-left font-medium ${
-                token
-                  ? "bg-gray-100 text-gray-800"
-                  : "bg-amber-100 text-amber-900"
-              }`}
+              className="w-full px-3 py-2 rounded-lg bg-gray-100 text-gray-800"
             >
               {token ? "Logout" : "Login"}
             </button>
