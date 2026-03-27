@@ -1,71 +1,57 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import {
-  Avatar,
-  Menu,
-  MenuItem,
-  IconButton,
-  Box,
-  Typography,
-  InputBase,
-  Badge,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import LogoutIcon from "@mui/icons-material/Logout";
-import SearchIcon from "@mui/icons-material/Search";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function AdminHeader({ isMobile, onMenuClick }) {
+export default function AdminHeader({ onMenuClick }) {
   const [adminName, setAdminName] = useState("Admin");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [notifAnchor, setNotifAnchor] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(false);
+  const [notifAnchor, setNotifAnchor] = useState(false);
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
+  const notifRef = useRef(null);
+  const profileRef = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const name = localStorage.getItem("adminName");
-    if (name) setAdminName(name);
-  }, []);
-
-  const pageTitle =
-    {
-      "/admin/dashboard": "Dashboard",
-      "/admin/appointments": "Appointments",
-      "/admin/services": "Services",
-      "/admin/gallery": "Gallery",
-      "/admin/reviews": "Reviews",
-      "/admin/customers": "Customers",
-      "/admin/slots": "Slots",
-      "/admin/birthdays": "Birthdays",
-    }[location.pathname] || "Dashboard";
+  const pageTitle = {
+    "/admin/dashboard": "Dashboard",
+    "/admin/appointments": "Appointments",
+    "/admin/services": "Services",
+    "/admin/gallery": "Gallery",
+    "/admin/reviews": "Reviews",
+    "/admin/customers": "Customers",
+    "/admin/slots": "Slots",
+    "/admin/birthdays": "Birthdays",
+    "/admin/bookings": "Bookings",
+    "/admin/festivals": "Festivals",
+  }[location.pathname] || "Dashboard";
 
   const fetchNotifications = async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/notifications`,
-    );
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`);
     const data = await res.json();
     setNotifications(data);
   };
 
   useEffect(() => {
+    const name = localStorage.getItem("adminName");
+    if (name) setAdminName(name);
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000); // 30 sec
+    const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifAnchor(false);
+      if (profileRef.current && !profileRef.current.contains(e.target)) setAnchorEl(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
-    setSearch(value);
-
+    setSearch(e.target.value);
     if (value.includes("appoint")) navigate("/admin/appointments");
     if (value.includes("service")) navigate("/admin/services");
     if (value.includes("gallery")) navigate("/admin/gallery");
@@ -74,6 +60,8 @@ export default function AdminHeader({ isMobile, onMenuClick }) {
     if (value.includes("slot")) navigate("/admin/slots");
     if (value.includes("birthday")) navigate("/admin/birthdays");
     if (value.includes("dashboard")) navigate("/admin/dashboard");
+    if (value.includes("booking")) navigate("/admin/bookings");
+    if (value.includes("festival")) navigate("/admin/festivals");
   };
 
   const logout = () => {
@@ -82,148 +70,119 @@ export default function AdminHeader({ isMobile, onMenuClick }) {
   };
 
   const clearAllNotifications = async () => {
-    await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, {
-      method: "DELETE",
-    });
+    await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, { method: "DELETE" });
     fetchNotifications();
+    setNotifAnchor(false);
   };
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <>
-      <Box
-        sx={{
-          height: 70,
-          px: 2,
-          position: "sticky",
-          top: 0,
-          zIndex: 1200,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          bgcolor: "#ffffff",
-          borderBottom: "1px solid #e5e7eb",
-        }}
+    <header className="sticky top-0 z-40 h-16 bg-white/90 backdrop-blur border-b border-slate-100 flex items-center px-4 md:px-6 gap-3">
+      {/* Mobile hamburger */}
+      <button
+        onClick={onMenuClick}
+        className="md:hidden w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors shrink-0"
       >
-        {/* LEFT */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {isMobile && (
-            <IconButton onClick={onMenuClick}>
-              <MenuIcon />
-            </IconButton>
-          )}
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
 
-          <Box>
-            <Typography fontWeight={700} fontSize={18} color="#111827">
-              {pageTitle}
-            </Typography>
-            <Typography fontSize={10} color="#6b7280">
-              Welcome back, {adminName}
-            </Typography>
-          </Box>
-        </Box>
+      {/* Page title */}
+      <div className="flex-1 min-w-0">
+        <p className="text-slate-800 font-semibold text-sm truncate">{pageTitle}</p>
+        <p className="text-slate-400 text-[11px] hidden sm:block">Welcome back, {adminName}</p>
+      </div>
 
-        {/* SEARCH + NOTIFICATION */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              bgcolor: "#f3f4f6",
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-              width: { xs: 100, sm: 180, md: 180 },
-              height: 38,
-            }}
-          >
-            <SearchIcon sx={{ fontSize: 18 }} />
-            <InputBase
-              value={search}
-              onChange={handleSearch}
-              placeholder="Search"
-              sx={{ ml: 1, fontSize: 14, width: "100%" }}
-            />
-          </Box>
+      {/* Search */}
+      <div className="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 h-9 w-44 focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+        <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          value={search}
+          onChange={handleSearch}
+          placeholder="Search..."
+          className="bg-transparent text-sm text-slate-700 placeholder-slate-400 outline-none w-full"
+        />
+      </div>
 
-          <IconButton onClick={(e) => setNotifAnchor(e.currentTarget)}>
-            <Badge badgeContent={unreadCount} color="error">
-              <NotificationsNoneIcon />
-            </Badge>
-          </IconButton>
-
-          <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-            <Avatar sx={{ bgcolor: "#2563eb", color: "#fff" }}>
-              {adminName[0]}
-            </Avatar>
-          </IconButton>
-        </Box>
-      </Box>
-
-      {/* PROFILE MENU */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-      >
-        <MenuItem disabled>{adminName}</MenuItem>
-        <MenuItem onClick={logout} sx={{ color: "#dc2626" }}>
-          <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
-          Logout
-        </MenuItem>
-      </Menu>
-
-      {/* NOTIFICATION MENU */}
-      <Menu
-        anchorEl={notifAnchor}
-        open={Boolean(notifAnchor)}
-        onClose={() => setNotifAnchor(null)}
-        PaperProps={{
-          sx: {
-            width: 320,
-            maxHeight: 380,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            px: 2,
-            py: 1,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+      {/* Notifications */}
+      <div className="relative shrink-0" ref={notifRef}>
+        <button
+          onClick={() => setNotifAnchor(!notifAnchor)}
+          className="relative w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors"
         >
-          <Typography fontWeight={600}>Notifications</Typography>
-          <Button size="small" color="error" onClick={clearAllNotifications}>
-            Clear All
-          </Button>
-        </Box>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </button>
 
-        <Divider />
-
-        {notifications.length === 0 ? (
-          <Typography sx={{ p: 2, color: "#6b7280" }}>
-            No notifications
-          </Typography>
-        ) : (
-          <List dense>
-            {notifications.map((n) => (
-              <ListItem
-                key={n._id}
-                button
-                onClick={() => {
-                  navigate(n.link);
-                  setNotifAnchor(null);
-                }}
-              >
-                <ListItemText primary={n.title} secondary={n.message} />
-              </ListItem>
-            ))}
-          </List>
+        {notifAnchor && (
+          <div className="absolute right-0 top-12 w-80 bg-white rounded-2xl shadow-xl shadow-slate-200/80 border border-slate-100 overflow-hidden z-50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+              <span className="text-slate-700 font-semibold text-sm">Notifications</span>
+              {notifications.length > 0 && (
+                <button onClick={clearAllNotifications} className="text-xs text-red-400 hover:text-red-600 font-medium">Clear All</button>
+              )}
+            </div>
+            <div className="max-h-64 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <p className="p-5 text-center text-slate-400 text-sm">No notifications</p>
+              ) : (
+                notifications.map((n) => (
+                  <button
+                    key={n._id}
+                    onClick={() => { navigate(n.link); setNotifAnchor(false); }}
+                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 ${!n.isRead ? "bg-indigo-50/40" : ""}`}
+                  >
+                    <p className="text-slate-700 text-sm font-medium">{n.title}</p>
+                    <p className="text-slate-400 text-xs mt-0.5 line-clamp-2">{n.message}</p>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
         )}
-      </Menu>
-    </>
+      </div>
+
+      {/* Profile */}
+      <div className="relative shrink-0" ref={profileRef}>
+        <button
+          onClick={() => setAnchorEl(!anchorEl)}
+          className="flex items-center gap-2 py-1 px-1.5 rounded-xl hover:bg-slate-50 transition-colors"
+        >
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white font-bold text-sm shadow shadow-indigo-200">
+            {adminName[0]?.toUpperCase()}
+          </div>
+          <span className="hidden sm:block text-slate-600 text-sm font-medium">{adminName}</span>
+        </button>
+
+        {anchorEl && (
+          <div className="absolute right-0 top-12 w-44 bg-white rounded-2xl shadow-xl shadow-slate-200/80 border border-slate-100 overflow-hidden z-50">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-slate-700 font-semibold text-sm">{adminName}</p>
+            </div>
+            <div className="p-2">
+              <button
+                onClick={logout}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-500 text-sm hover:bg-red-50 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
   );
 }

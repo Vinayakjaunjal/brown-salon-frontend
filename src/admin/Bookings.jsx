@@ -1,20 +1,11 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Select,
-  MenuItem,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+
+const STATUS_STYLES = {
+  confirmed: { bg: "bg-indigo-50", text: "text-indigo-600" },
+  completed:  { bg: "bg-emerald-50", text: "text-emerald-600" },
+  cancelled:  { bg: "bg-red-50", text: "text-red-500" },
+  "no-show":  { bg: "bg-slate-100", text: "text-slate-500" },
+};
 
 export default function Bookings() {
   const [data, setData] = useState([]);
@@ -22,254 +13,146 @@ export default function Bookings() {
   const [statusFilter, setStatusFilter] = useState("");
   const [search, setSearch] = useState("");
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    console.log("ADMIN API:", import.meta.env.VITE_API_URL);
     fetch(`${import.meta.env.VITE_API_URL}/api/bookings/all`)
       .then((res) => res.text())
       .then((text) => {
-        console.log("RAW RESPONSE:", text);
-
         try {
           const res = JSON.parse(text);
-
           if (Array.isArray(res)) setData(res);
           else if (Array.isArray(res.data)) setData(res.data);
           else setData([]);
-        } catch {
-          console.error("NOT JSON RESPONSE");
-          setData([]);
-        }
+        } catch { setData([]); }
       });
   }, []);
 
   const updateStatus = async (id, status) => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/bookings/${id}/status`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status }),
-        },
-      );
-
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/bookings/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
       const result = await res.json();
-      console.log("UPDATED RESPONSE:", result);
-
       setData((prev) => prev.map((b) => (b._id === id ? result.data : b)));
-    } catch (err) {
-      console.log("UPDATE ERROR:", err);
-    }
+    } catch (err) { console.log("UPDATE ERROR:", err); }
   };
 
-  const filteredData = data.filter((b) => {
-    return (
-      (!selectedDate || b.date === selectedDate) &&
-      (!statusFilter || b.status === statusFilter) &&
-      (!search ||
-        b.name?.toLowerCase().includes(search.toLowerCase()) ||
-        b.serviceName?.toLowerCase().includes(search.toLowerCase()))
-    );
-  });
+  const filteredData = data.filter((b) =>
+    (!selectedDate || b.date === selectedDate) &&
+    (!statusFilter || b.status === statusFilter) &&
+    (!search || b.name?.toLowerCase().includes(search.toLowerCase()) || b.serviceName?.toLowerCase().includes(search.toLowerCase()))
+  );
 
   const sortedData = Array.isArray(filteredData)
-    ? [...filteredData].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      )
+    ? [...filteredData].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     : [];
 
   return (
-    <Box sx={{ bgcolor: "#fff", minHeight: "100vh", p: 2 }}>
-      <Typography variant="h5" fontWeight={600} mb={2}>
-        Bookings
-      </Typography>
+    <div className="space-y-5">
+      <h2 className="text-slate-800 font-bold text-xl">Bookings</h2>
 
-      <input
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        style={{
-          padding: "10px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-          marginBottom: "20px",
-        }}
-      />
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3">
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300 transition-all"
+        />
+        <input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300 transition-all w-40"
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300 transition-all cursor-pointer"
+        >
+          <option value="">All</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="no-show">No Show</option>
+        </select>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{ marginLeft: 10, padding: 8 }}
-      />
+      {/* Desktop Table */}
+      <div className="hidden md:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-slate-50/60 border-b border-slate-100">
+              {["Name", "Service", "Date", "Time", "Phone", "Status"].map((h) => (
+                <th key={h} className="text-left text-slate-400 text-xs font-semibold uppercase tracking-wide px-5 py-3">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50">
+            {sortedData.length === 0 ? (
+              <tr><td colSpan={6} className="text-center py-12 text-slate-400 text-sm">No bookings found</td></tr>
+            ) : sortedData.map((b) => {
+              const s = STATUS_STYLES[b.status] || STATUS_STYLES.confirmed;
+              return (
+                <tr key={b._id} className="hover:bg-slate-50/40 transition-colors">
+                  <td className="px-5 py-3 text-slate-700 text-sm font-medium">{b.name || "User"}</td>
+                  <td className="px-5 py-3 text-slate-500 text-sm">{b.serviceName || "—"}</td>
+                  <td className="px-5 py-3 text-slate-500 text-sm">{b.date}</td>
+                  <td className="px-5 py-3 text-slate-500 text-sm">{b.time}</td>
+                  <td className="px-5 py-3 text-slate-500 text-sm">{b.phone || "—"}</td>
+                  <td className="px-5 py-3">
+                    <select
+                      value={b.status || "confirmed"}
+                      onChange={(e) => updateStatus(b._id, e.target.value)}
+                      className={`text-xs font-semibold px-2.5 py-1.5 rounded-lg border-0 cursor-pointer outline-none focus:ring-2 focus:ring-indigo-200 ${s.bg} ${s.text}`}
+                    >
+                      <option value="confirmed">Confirmed</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                      <option value="no-show">No Show</option>
+                    </select>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
-      <Select
-        value={statusFilter}
-        onChange={(e) => setStatusFilter(e.target.value)}
-        size="small"
-        sx={{ ml: 2 }}
-      >
-        <MenuItem value="">All</MenuItem>
-        <MenuItem value="confirmed">Confirmed</MenuItem>
-        <MenuItem value="completed">Completed</MenuItem>
-        <MenuItem value="cancelled">Cancelled</MenuItem>
-        <MenuItem value="no-show">No Show</MenuItem>
-      </Select>
-
-      {isMobile ? (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {Array.isArray(sortedData) &&
-            sortedData.map((b) => (
-              <Paper
-                key={b._id}
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  boxShadow: 2,
-                }}
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {sortedData.length === 0 ? (
+          <p className="text-center py-10 text-slate-400 text-sm">No bookings found</p>
+        ) : sortedData.map((b) => {
+          const s = STATUS_STYLES[b.status] || STATUS_STYLES.confirmed;
+          return (
+            <div key={b._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-slate-700 font-semibold text-sm">{b.name || "User"}</p>
+                  <p className="text-slate-400 text-xs mt-0.5">💇 {b.serviceName || "Service"}</p>
+                  <p className="text-slate-400 text-xs">⏰ {b.time} {b.phone ? `| 📞 ${b.phone}` : ""}</p>
+                </div>
+                <span className="text-slate-400 text-xs shrink-0 ml-2">{b.date}</span>
+              </div>
+              <select
+                value={b.status || "confirmed"}
+                onChange={(e) => updateStatus(b._id, e.target.value)}
+                className={`w-full text-sm font-semibold px-3 py-2.5 rounded-xl border-0 cursor-pointer outline-none ${s.bg} ${s.text}`}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography fontWeight={700} fontSize={16}>
-                    {b.name || "User"}
-                  </Typography>
-
-                  <Typography variant="caption" color="text.secondary">
-                    {b.date}
-                  </Typography>
-                </Box>
-
-                {/* SERVICE */}
-                <Typography variant="body2" sx={{ color: "#555", mt: 0.5 }}>
-                  💇 {b.serviceName || "Service"}
-                </Typography>
-
-                {/* TIME + PHONE */}
-                <Typography variant="body2" sx={{ color: "#777", mt: 0.5 }}>
-                  ⏰ {b.time} {b.phone ? `| 📞 ${b.phone}` : ""}
-                </Typography>
-
-                {/* STATUS */}
-                <Select
-                  fullWidth
-                  size="small"
-                  value={b.status || "confirmed"}
-                  onChange={(e) => updateStatus(b._id, e.target.value)}
-                  sx={{
-                    mt: 1.5,
-                    bgcolor:
-                      b.status === "completed"
-                        ? "#2e7d32"
-                        : b.status === "cancelled"
-                          ? "#d32f2f"
-                          : b.status === "no-show"
-                            ? "#757575"
-                            : "#1976d2",
-                    color: "#fff",
-                    borderRadius: 2,
-                  }}
-                >
-                  <MenuItem value="confirmed">Confirmed</MenuItem>
-                  <MenuItem value="completed">Completed</MenuItem>
-                  <MenuItem value="cancelled">Cancelled</MenuItem>
-                  <MenuItem value="no-show">No Show</MenuItem>
-                </Select>
-              </Paper>
-            ))}
-
-          {sortedData.length === 0 && (
-            <Typography align="center" color="text.secondary">
-              No bookings found
-            </Typography>
-          )}
-        </Box>
-      ) : (
-        /* DESKTOP VIEW */
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: "#1e3c72" }}>
-                <TableCell sx={{ color: "#fff" }}>Name</TableCell>
-                <TableCell sx={{ color: "#fff" }}>Service</TableCell>
-                <TableCell sx={{ color: "#fff" }}>Date</TableCell>
-                <TableCell sx={{ color: "#fff" }}>Time</TableCell>
-                <TableCell sx={{ color: "#fff" }}>Phone</TableCell>
-                <TableCell sx={{ color: "#fff" }}>Status</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {Array.isArray(sortedData) &&
-                sortedData.map((b) => (
-                  <TableRow key={b._id}>
-                    <TableCell>{b.name || "User"}</TableCell>
-                    <TableCell>{b.serviceName || "Service"}</TableCell>
-                    <TableCell>{b.date}</TableCell>
-                    <TableCell>{b.time}</TableCell>
-                    <TableCell>{b.phone || "-"}</TableCell>
-
-                    <TableCell>
-                      <Select
-                        size="small"
-                        value={b.status || "confirmed"}
-                        onChange={(e) => updateStatus(b._id, e.target.value)}
-                        sx={{
-                          minWidth: 120,
-                          fontWeight: 600,
-
-                          bgcolor:
-                            b.status === "completed"
-                              ? "#2e7d32"
-                              : b.status === "cancelled"
-                                ? "#d32f2f"
-                                : b.status === "no-show"
-                                  ? "#757575"
-                                  : "#1976d2",
-
-                          color: "#fff",
-
-                          "& .MuiSelect-select": {
-                            display: "flex",
-                            alignItems: "center",
-                            color: "#fff",
-                          },
-
-                          "& .MuiSvgIcon-root": {
-                            color: "#fff",
-                          },
-                        }}
-                      >
-                        <MenuItem value="confirmed">Confirmed</MenuItem>
-                        <MenuItem value="completed">Completed</MenuItem>
-                        <MenuItem value="cancelled">Cancelled</MenuItem>
-                        <MenuItem value="no-show">No Show</MenuItem>
-                      </Select>
-                    </TableCell>
-                  </TableRow>
-                ))}
-
-              {sortedData.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    No bookings found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Box>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="no-show">No Show</option>
+              </select>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
