@@ -25,7 +25,7 @@ export default function Hero() {
           </span>
 
           <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-[var(--text-primary)]">
-            Experience Premium Salon Services
+            Best Salon in Nagpur – Experience Premium Salon Services
             <span className="text-yellow-600"> At Brown Salon</span>
           </h1>
 
