@@ -12,7 +12,6 @@ export default function Gallery() {
       .catch(() => setImages([]));
   }, []);
 
-  // FILTER LOGIC
   const filteredImages =
     active === "all" ? images : images.filter((img) => img.category === active);
 
@@ -21,7 +20,6 @@ export default function Gallery() {
       <div className="max-w-6xl mx-auto px-5">
         <h2 className="text-3xl font-semibold text-center mb-6">Our Work</h2>
 
-        {/* FILTER BUTTONS */}
         <div className="flex justify-center gap-6 mb-10 text-sm font-medium">
           {["all", "work", "bts", "ambience"].map((cat) => (
             <button
@@ -29,7 +27,7 @@ export default function Gallery() {
               onClick={() => setActive(cat)}
               className={`pb-1 capitalize transition ${
                 active === cat
-                  ? "text-black border-b border-black"
+                  ? "text-black border-b-2 border-yellow-600"
                   : "text-gray-500 hover:text-black"
               }`}
             >
@@ -38,7 +36,6 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* MASONRY GRID */}
         <div className="columns-2 sm:columns-3 md:columns-4 gap-2 space-y-2">
           {filteredImages.map((img, i) => (
             <div
@@ -61,7 +58,6 @@ export default function Gallery() {
         )}
       </div>
 
-      {/* LIGHTBOX */}
       {lightbox && (
         <div
           onClick={() => setLightbox(null)}
