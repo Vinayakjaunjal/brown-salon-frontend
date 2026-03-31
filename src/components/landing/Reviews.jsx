@@ -61,7 +61,7 @@ export default function Reviews() {
                     <div className="flex flex-col items-center">
                       {item.image ? (
                         <img
-                          src={`${import.meta.env.VITE_API_URL}${item.image}`}
+                          src={item.image}
                           className="w-16 h-16 rounded-full object-cover mb-3"
                         />
                       ) : (

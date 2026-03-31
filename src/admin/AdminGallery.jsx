@@ -142,7 +142,7 @@ export default function AdminGallery() {
                         className="relative group rounded-xl overflow-hidden border shadow-sm"
                       >
                         <img
-                          src={`${import.meta.env.VITE_API_URL}${img.image}`}
+                          src={img.image}
                           className="w-full object-cover"
                           style={{ height: 270 }}
                         />

@@ -13,7 +13,11 @@ export default function AdminReviews() {
   const [image, setImage] = useState(null);
   const [editId, setEditId] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [snack, setSnack] = useState({ open: false, message: "", severity: "success" });
+  const [snack, setSnack] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -28,10 +32,15 @@ export default function AdminReviews() {
     setReviews(data);
   };
 
-  useEffect(() => { loadReviews(); }, []);
+  useEffect(() => {
+    loadReviews();
+  }, []);
 
   const saveReview = async () => {
-    if (!form.name || !form.review) { showSnack("Name & review required", "error"); return; }
+    if (!form.name || !form.review) {
+      showSnack("Name & review required", "error");
+      return;
+    }
     const fd = new FormData();
     fd.append("name", form.name);
     fd.append("review", form.review);
@@ -42,7 +51,9 @@ export default function AdminReviews() {
       : `${import.meta.env.VITE_API_URL}/api/reviews`;
     await fetch(url, { method: editId ? "PUT" : "POST", body: fd });
     setForm({ name: "", review: "", rating: 5 });
-    setImage(null); setEditId(null); setPreview(null);
+    setImage(null);
+    setEditId(null);
+    setPreview(null);
     loadReviews();
     showSnack(editId ? "Review updated" : "Review added");
   };
@@ -53,17 +64,25 @@ export default function AdminReviews() {
     if (r.image) setPreview(`${import.meta.env.VITE_API_URL}${r.image}`);
   };
 
-  const askDelete = (id) => { setDeleteId(id); setConfirmOpen(true); };
+  const askDelete = (id) => {
+    setDeleteId(id);
+    setConfirmOpen(true);
+  };
 
   const confirmDelete = async () => {
-    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${deleteId}`, { method: "DELETE" });
-    setConfirmOpen(false); setDeleteId(null);
+    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${deleteId}`, {
+      method: "DELETE",
+    });
+    setConfirmOpen(false);
+    setDeleteId(null);
     loadReviews();
     showSnack("Review deleted");
   };
 
   const toggleReview = async (id) => {
-    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${id}/toggle`, { method: "PUT" });
+    await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${id}/toggle`, {
+      method: "PUT",
+    });
     loadReviews();
     showSnack("Status updated");
   };
@@ -91,7 +110,8 @@ export default function AdminReviews() {
             type="number"
             placeholder="Rating"
             value={form.rating}
-            min={1} max={5}
+            min={1}
+            max={5}
             onChange={(e) => setForm({ ...form, rating: e.target.value })}
             className="w-24 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300 transition-all"
           />
@@ -106,7 +126,11 @@ export default function AdminReviews() {
             className="text-sm text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer self-center"
           />
           {preview && (
-            <img src={preview} alt="" className="w-10 h-10 rounded-full object-cover self-center border border-slate-200" />
+            <img
+              src={preview}
+              alt=""
+              className="w-10 h-10 rounded-full object-cover self-center border border-slate-200"
+            />
           )}
           <button
             onClick={saveReview}
@@ -120,17 +144,28 @@ export default function AdminReviews() {
       {/* Desktop */}
       <div className="hidden md:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         {reviews.map((r) => (
-          <div key={r._id} className="flex justify-between items-center px-5 py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50/40 transition-colors">
+          <div
+            key={r._id}
+            className="flex justify-between items-center px-5 py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50/40 transition-colors"
+          >
             <div className="flex items-center gap-3">
               {r.image ? (
-                <img src={`${import.meta.env.VITE_API_URL}${r.image}`} alt="" className="w-12 h-12 rounded-full object-cover" />
+                <img
+                  src={r.image}
+                  alt=""
+                  className="w-12 h-12 rounded-full object-cover"
+                />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600">{getInitials(r.name)}</div>
+                <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600">
+                  {getInitials(r.name)}
+                </div>
               )}
               <div>
                 <p className="text-slate-700 font-semibold text-sm">{r.name}</p>
                 <p className="text-slate-500 text-sm">{r.review}</p>
-                <p className="text-amber-500 text-xs">{"⭐".repeat(r.rating)} {r.rating}</p>
+                <p className="text-amber-500 text-xs">
+                  {"⭐".repeat(r.rating)} {r.rating}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -139,33 +174,80 @@ export default function AdminReviews() {
                 onClick={() => toggleReview(r._id)}
                 className={`relative w-11 h-6 rounded-full transition-colors ${r.isActive ? "bg-indigo-500" : "bg-slate-200"}`}
               >
-                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${r.isActive ? "translate-x-5" : "translate-x-0"}`} />
+                <span
+                  className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${r.isActive ? "translate-x-5" : "translate-x-0"}`}
+                />
               </button>
-              <button onClick={() => editReview(r)} className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-400 hover:bg-indigo-100 hover:text-indigo-600 flex items-center justify-center transition-colors">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+              <button
+                onClick={() => editReview(r)}
+                className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-400 hover:bg-indigo-100 hover:text-indigo-600 flex items-center justify-center transition-colors"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
               </button>
-              <button onClick={() => askDelete(r._id)} className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-colors">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              <button
+                onClick={() => askDelete(r._id)}
+                className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-colors"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
               </button>
             </div>
           </div>
         ))}
-        {reviews.length === 0 && <p className="text-center py-12 text-slate-400 text-sm">No reviews yet</p>}
+        {reviews.length === 0 && (
+          <p className="text-center py-12 text-slate-400 text-sm">
+            No reviews yet
+          </p>
+        )}
       </div>
 
       {/* Mobile */}
       <div className="md:hidden space-y-3">
         {reviews.map((r) => (
-          <div key={r._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            key={r._id}
+            className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+          >
             <div className="flex items-center gap-3 mb-3">
               {r.image ? (
-                <img src={`${import.meta.env.VITE_API_URL}${r.image}`} alt="" className="w-11 h-11 rounded-full object-cover shrink-0" />
+                <img
+                  src={r.image}
+                  alt=""
+                  className="w-11 h-11 rounded-full object-cover shrink-0"
+                />
               ) : (
-                <div className="w-11 h-11 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600 shrink-0">{getInitials(r.name)}</div>
+                <div className="w-11 h-11 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600 shrink-0">
+                  {getInitials(r.name)}
+                </div>
               )}
               <div>
                 <p className="text-slate-700 font-semibold text-sm">{r.name}</p>
-                <p className="text-amber-500 text-xs">{"⭐".repeat(r.rating)} {r.rating}</p>
+                <p className="text-amber-500 text-xs">
+                  {"⭐".repeat(r.rating)} {r.rating}
+                </p>
               </div>
             </div>
             <p className="text-slate-500 text-sm mb-3">{r.review}</p>
@@ -174,14 +256,46 @@ export default function AdminReviews() {
                 onClick={() => toggleReview(r._id)}
                 className={`relative w-11 h-6 rounded-full transition-colors ${r.isActive ? "bg-indigo-500" : "bg-slate-200"}`}
               >
-                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${r.isActive ? "translate-x-5" : "translate-x-0"}`} />
+                <span
+                  className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${r.isActive ? "translate-x-5" : "translate-x-0"}`}
+                />
               </button>
               <div className="flex gap-2">
-                <button onClick={() => editReview(r)} className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-400 hover:bg-indigo-100 flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                <button
+                  onClick={() => editReview(r)}
+                  className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-400 hover:bg-indigo-100 flex items-center justify-center"
+                >
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
                 </button>
-                <button onClick={() => askDelete(r._id)} className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                <button
+                  onClick={() => askDelete(r._id)}
+                  className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 flex items-center justify-center"
+                >
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -192,13 +306,30 @@ export default function AdminReviews() {
       {/* Confirm Delete Dialog */}
       {confirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setConfirmOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setConfirmOpen(false)}
+          />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 z-10">
-            <h3 className="text-slate-800 font-bold text-base mb-2">Confirm Delete</h3>
-            <p className="text-slate-500 text-sm mb-5">Are you sure you want to delete this review?</p>
+            <h3 className="text-slate-800 font-bold text-base mb-2">
+              Confirm Delete
+            </h3>
+            <p className="text-slate-500 text-sm mb-5">
+              Are you sure you want to delete this review?
+            </p>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setConfirmOpen(false)} className="px-4 py-2 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Cancel</button>
-              <button onClick={confirmDelete} className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition-colors">Delete</button>
+              <button
+                onClick={() => setConfirmOpen(false)}
+                className="px-4 py-2 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition-colors"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -206,7 +337,9 @@ export default function AdminReviews() {
 
       {/* Toast */}
       {snack.open && (
-        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl text-sm font-medium shadow-xl ${snack.severity === "error" ? "bg-red-500 text-white" : "bg-slate-800 text-white"}`}>
+        <div
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl text-sm font-medium shadow-xl ${snack.severity === "error" ? "bg-red-500 text-white" : "bg-slate-800 text-white"}`}
+        >
           {snack.message}
         </div>
       )}

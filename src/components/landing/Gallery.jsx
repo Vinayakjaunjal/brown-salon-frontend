@@ -37,20 +37,24 @@ export default function Gallery() {
         </div>
 
         <div className="columns-2 sm:columns-3 md:columns-4 gap-2 space-y-2">
-          {filteredImages.map((img, i) => (
-            <div
-              key={i}
-              onClick={() => setLightbox(img.image)}
-              className="break-inside-avoid overflow-hidden cursor-pointer group"
-            >
-              <img
-                src={`${import.meta.env.VITE_API_URL}${img.image}`}
-                alt="gallery"
-                loading="lazy"
-                className="w-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:brightness-110"
-              />
-            </div>
-          ))}
+          {filteredImages.map((img, i) => {
+            console.log("GALLERY IMAGE:", img.image);
+            return (
+              <div
+                key={i}
+                onClick={() => setLightbox(img.image)}
+                className="break-inside-avoid overflow-hidden cursor-pointer group"
+              >
+                <img
+                  src={img.image}
+                  alt="gallery"
+                  loading="lazy"
+                  className="w-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:brightness-110"
+                />
+              </div>
+            );
+          })}
+          ;
         </div>
 
         {filteredImages.length === 0 && (
