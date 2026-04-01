@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import dayjs from "dayjs";
 
 export default function AdminHeader({ onMenuClick }) {
   const [adminName, setAdminName] = useState("Admin");
@@ -76,10 +77,17 @@ export default function AdminHeader({ onMenuClick }) {
 
   const clearAllNotifications = async () => {
     await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, {
-      method: "PUT",
+      method: "DELETE",
     });
-    fetchNotifications();
+    setNotifications([]);
     setNotifAnchor(false);
+  };
+
+  const deleteNotification = async () => {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/${id}`, {
+      method: "DELETE",
+    });
+    setNotifications((prev) => prev.filter((n) => n._id !== id));
   };
 
   const markAsRead = async (id) => {
@@ -95,11 +103,20 @@ export default function AdminHeader({ onMenuClick }) {
     );
   };
 
+  const todayNotifications = notifications.filter((n) =>
+    dayjs(n.createdAt).isSame(dayjs(), "day"),
+  );
+
+  const last7DaysNotifications = notifications.filter(
+    (n) =>
+      dayjs(n.createdAt).isAfter(dayjs().subtract(7, "day")) &&
+      !dayjs(n.createdAt).isSame(dayjs(), "day"),
+  );
+
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <header className="sticky top-0 z-40 h-16 bg-white/90 backdrop-blur border-b border-slate-100 flex items-center px-4 md:px-6 gap-3">
-      {/* Mobile hamburger */}
       <button
         onClick={onMenuClick}
         className="md:hidden w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors shrink-0"
@@ -119,7 +136,6 @@ export default function AdminHeader({ onMenuClick }) {
         </svg>
       </button>
 
-      {/* Page title */}
       <div className="flex-1 min-w-0">
         <p className="text-slate-800 font-semibold text-sm truncate">
           {pageTitle}
@@ -194,29 +210,83 @@ export default function AdminHeader({ onMenuClick }) {
               )}
             </div>
             <div className="max-h-64 overflow-y-auto">
-              {notifications.length === 0 ? (
-                <p className="p-5 text-center text-slate-400 text-sm">
-                  No notifications
-                </p>
-              ) : (
-                notifications.map((n) => (
-                  <button
-                    key={n._id}
-                    onClick={() => {
-                      markAsRead(n._id);
-                      navigate(n.link);
-                      setNotifAnchor(false);
-                    }}
-                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 ${!n.isRead ? "bg-indigo-50/40" : ""}`}
-                  >
-                    <p className="text-slate-700 text-sm font-medium">
-                      {n.title}
-                    </p>
-                    <p className="text-slate-400 text-xs mt-0.5 line-clamp-2">
-                      {n.message}
-                    </p>
-                  </button>
-                ))
+              {todayNotifications.length > 0 && (
+                <>
+                  <p className="px-4 py-2 text-xs text-gray-400 font-semibold">
+                    Today
+                  </p>
+
+                  {todayNotifications.map((n) => (
+                    <div
+                      key={n._id}
+                      className="flex justify-between px-4 py-3 hover:bg-slate-50"
+                    >
+                      <div
+                        onClick={() => {
+                          markAsRead(n._id);
+                          navigate(n.link);
+                          setNotifAnchor(false);
+                        }}
+                        className="flex gap-2 cursor-pointer"
+                      >
+                        <span>{n.type === "appointment" ? "📅" : "🎂"}</span>
+                        <div>
+                          <p className="text-sm font-semibold">{n.title}</p>
+                          <p className="text-xs text-gray-400">{n.message}</p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteNotification(n._id);
+                        }}
+                        className="text-red-400 text-xs"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </>
+              )}
+              {last7DaysNotifications.length > 0 && (
+                <>
+                  <p className="px-4 py-2 text-xs text-gray-400 font-semibold">
+                    Last 7 Days
+                  </p>
+
+                  {last7DaysNotifications.map((n) => (
+                    <div
+                      key={n._id}
+                      className="flex justify-between px-4 py-3 hover:bg-slate-50"
+                    >
+                      <div
+                        onClick={() => {
+                          markAsRead(n._id);
+                          navigate(n.link);
+                          setNotifAnchor(false);
+                        }}
+                        className="flex gap-2 cursor-pointer"
+                      >
+                        <span>{n.type === "appointment" ? "📅" : "🎂"}</span>
+                        <div>
+                          <p className="text-sm font-semibold">{n.title}</p>
+                          <p className="text-xs text-gray-400">{n.message}</p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteNotification(n._id);
+                        }}
+                        className="text-red-400 text-xs"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           </div>
