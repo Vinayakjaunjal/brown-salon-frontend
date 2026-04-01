@@ -34,7 +34,7 @@ export default function AdminGallery() {
     for (let i = 0; i < files.length; i++) {
       const fd = new FormData();
       fd.append("image", files[i]);
-      fd.append("category", category); // ✅ FIXED
+      fd.append("category", category);
 
       await fetch(`${import.meta.env.VITE_API_URL}/api/gallery`, {
         method: "POST",

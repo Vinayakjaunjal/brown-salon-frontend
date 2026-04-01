@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 export default function Gallery() {
   const [images, setImages] = useState([]);
   const [lightbox, setLightbox] = useState(null);
-  const [active, setActive] = useState("all");
+  const [active, setActive] = useState("work");
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/gallery`)
@@ -12,8 +12,7 @@ export default function Gallery() {
       .catch(() => setImages([]));
   }, []);
 
-  const filteredImages =
-    active === "all" ? images : images.filter((img) => img.category === active);
+  const filteredImages = images.filter((img) => img.category === active);
 
   return (
     <section className="py-12 bg-white">
@@ -21,7 +20,7 @@ export default function Gallery() {
         <h2 className="text-3xl font-semibold text-center mb-6">Our Work</h2>
 
         <div className="flex justify-center gap-6 mb-10 text-sm font-medium">
-          {["all", "work", "bts", "ambience"].map((cat) => (
+          {["work", "bts", "ambience"].map((cat) => (
             <button
               key={cat}
               onClick={() => setActive(cat)}
@@ -54,7 +53,6 @@ export default function Gallery() {
               </div>
             );
           })}
-          ;
         </div>
 
         {filteredImages.length === 0 && (
