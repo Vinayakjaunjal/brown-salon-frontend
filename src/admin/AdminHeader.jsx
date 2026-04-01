@@ -39,7 +39,7 @@ export default function AdminHeader({ onMenuClick }) {
     const name = localStorage.getItem("adminName");
     if (name) setAdminName(name);
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
+    const interval = setInterval(fetchNotifications, 10000);
     return () => clearInterval(interval);
   }, []);
 
