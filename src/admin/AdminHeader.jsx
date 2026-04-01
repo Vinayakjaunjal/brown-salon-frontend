@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 export default function AdminHeader({ onMenuClick }) {
   const [adminName, setAdminName] = useState("Admin");
@@ -241,6 +244,9 @@ export default function AdminHeader({ onMenuClick }) {
                         <div>
                           <p className="text-sm font-semibold">{n.title}</p>
                           <p className="text-xs text-gray-400">{n.message}</p>
+                          <p className="text-[10px] text-gray-400 mt-1">
+                            {dayjs(n.createdAt).fromNow()}
+                          </p>
                         </div>
                       </div>
 
