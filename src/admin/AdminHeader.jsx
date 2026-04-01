@@ -83,11 +83,19 @@ export default function AdminHeader({ onMenuClick }) {
     setNotifAnchor(false);
   };
 
-  const deleteNotification = async () => {
-    await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/${id}`, {
-      method: "DELETE",
-    });
-    setNotifications((prev) => prev.filter((n) => n._id !== id));
+  const deleteNotification = async (id) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/notifications/${id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+      setNotifications((prev) => prev.filter((n) => n._id !== id));
+    }
   };
 
   const markAsRead = async (id) => {
