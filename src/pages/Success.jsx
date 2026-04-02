@@ -108,12 +108,10 @@ export default function Success() {
           </div>
         </div>
 
-        {/* MESSAGE */}
         <div className="text-xs text-gray-500 mb-5">
           Please arrive 5–10 minutes early for a smooth experience.
         </div>
 
-        {/* ACTION BUTTONS */}
         <div className="flex flex-col gap-3">
           <button
             onClick={() => nav("/profile", { state: { scrollToTop: true } })}

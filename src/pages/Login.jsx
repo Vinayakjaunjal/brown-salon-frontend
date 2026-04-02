@@ -18,6 +18,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [step, setStep] = useState(1);
+  const [otp, setOtp] = useState("");
   const nav = useNavigate();
   const roleBlockedMessage = location.state?.error || "";
 
@@ -65,48 +67,60 @@ export default function Login() {
     e.preventDefault();
     resetFormState();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
-    try {
-      const url = isRegister ? "/auth/register" : "/auth/login";
-      const payload = isRegister
-        ? { name: name.trim(), phone: phone.trim(), password }
-        : { phone: phone.trim(), password };
-      const res = await api.post(url, payload);
 
-      const { token, user } = res.data.data;
-      if (user.role !== "user") {
-        clearAuthSession();
-        setError(
-          "This panel is only for customers. Please login from your dedicated provider/admin panel.",
-        );
+    try {
+      if (!isRegister) {
+        const res = await api.post("/auth/login", {
+          phone: phone.trim(),
+          password,
+        });
+
+        const { token, user } = res.data.data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", user.role);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        nav("/");
         return;
       }
+
+      await api.post("/auth/send-otp", {
+        phone: phone.trim(),
+      });
+
+      alert("OTP sent");
+      setStep(2);
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    setLoading(true);
+
+    try {
+      const res = await api.post("/auth/verify-otp", {
+        phone: phone.trim(),
+        otp,
+        name: name.trim(),
+        password,
+      });
+
+      const { token, user } = res.data.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role);
       localStorage.setItem("user", JSON.stringify(user));
 
-      const pendingBooking = localStorage.getItem("pendingBooking");
-
-      if (pendingBooking) {
-        const bookingData = JSON.parse(pendingBooking);
-
-        localStorage.removeItem("pendingBooking");
-
-        nav("/checkout", {
-          state: bookingData,
-        });
-      } else {
-        nav("/");
-      }
+      nav("/");
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Authentication failed",
-      );
+      setError(err.response?.data?.message || "Invalid OTP");
     } finally {
       setLoading(false);
     }
@@ -153,122 +167,77 @@ export default function Login() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {isRegister && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <UserCircle2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <form
+              onSubmit={step === 1 ? handleSubmit : (e) => e.preventDefault()}
+              className="space-y-4"
+            >
+              {step === 1 && (
+                <>
+                  {isRegister && (
                     <Input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Enter your name"
-                      className="pl-9"
-                      autoCapitalize="words"
-                      autoCorrect="off"
-                      spellCheck={false}
-                      error={Boolean(fieldErrors.name)}
-                      disabled={loading}
+                      placeholder="Full Name"
                     />
-                  </div>
-                  {fieldErrors.name && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {fieldErrors.name}
-                    </p>
                   )}
-                </div>
-              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Phone or Email
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <Input
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="e.g. +91 9999999999 or you@email.com"
-                    className="pl-9"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck={false}
-                    error={Boolean(fieldErrors.phone)}
-                    disabled={loading}
+                    placeholder="Phone"
                   />
-                </div>
-                {fieldErrors.phone && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.phone}
-                  </p>
-                )}
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <Input
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter password"
-                    className="pl-9 pr-10"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck={false}
-                    error={Boolean(fieldErrors.password)}
-                    disabled={loading}
+                    placeholder="Password"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-500 hover:text-gray-700 rounded-md"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                    disabled={loading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-                {fieldErrors.password && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.password}
-                  </p>
-                )}
-              </div>
-
-              {!isRegister && (
-                <div className="text-right">
-                  <Link
-                    to="/forgot-password"
-                    className="text-sm text-gray-600 hover:text-gray-900 underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                </>
               )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 sm:py-3 rounded-2xl btn-primary font-semibold text-black disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {loading
-                  ? "Please wait..."
-                  : isRegister
-                    ? "Create Account"
-                    : "Login"}
-              </button>
+              {step === 2 && (
+                <>
+                  <p className="text-sm text-gray-600 text-center">
+                    Enter OTP sent to {phone}
+                  </p>
+
+                  <Input
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="Enter OTP"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    className="w-full py-3 rounded-2xl btn-primary font-semibold"
+                  >
+                    Verify OTP
+                  </button>
+                </>
+              )}
+
+              {step === 1 && (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-2xl btn-primary font-semibold"
+                >
+                  {isRegister ? "Send OTP" : "Login"}
+                </button>
+              )}
+
+              {step === 2 && (
+                <button
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  disabled={loading}
+                  className="w-full py-3 rounded-2xl btn-primary font-semibold"
+                >
+                  Verify OTP
+                </button>
+              )}
             </form>
 
             <div className="text-center text-sm text-gray-600 mt-5">
