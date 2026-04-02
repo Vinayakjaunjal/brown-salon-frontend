@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import api from "../utils/api";
 import { AuthSticker } from "../components/illustrations/SalonIllustrations";
 import { clearAuthSession } from "../utils/auth";
+import { useEffect } from "react";
 
 const phoneRegex = /^\+?[0-9\s()-]{8,20}$/;
 
@@ -20,6 +21,8 @@ export default function Login() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [step, setStep] = useState(1);
   const [otp, setOtp] = useState("");
+  const [timer, setTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
   const nav = useNavigate();
   const roleBlockedMessage = location.state?.error || "";
 
@@ -44,8 +47,8 @@ export default function Login() {
 
     if (!phone.trim()) {
       nextErrors.phone = "Phone or email is required";
-    } else if (!phone.includes("@") && !phoneRegex.test(phone.trim())) {
-      nextErrors.phone = "Please enter a valid phone number or email";
+    } else if (!phone.includes("@")) {
+      nextErrors.phone = "Please enter a valid email";
     }
 
     if (!password) {
@@ -72,6 +75,7 @@ export default function Login() {
     setLoading(true);
 
     try {
+      // LOGIN
       if (!isRegister) {
         const res = await api.post("/auth/login", {
           phone: phone.trim(),
@@ -81,25 +85,40 @@ export default function Login() {
         const { token, user } = res.data.data;
 
         localStorage.setItem("token", token);
-        localStorage.setItem("role", user.role);
         localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("role", user.role);
 
-        nav("/");
+        nav("/profile");
         return;
       }
 
+      // REGISTER → SEND OTP
       await api.post("/auth/send-otp", {
         phone: phone.trim(),
       });
 
-      alert("OTP sent");
       setStep(2);
+      setTimer(30);
+      setCanResend(false);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (step === 2 && timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+
+    if (timer === 0) {
+      setCanResend(true);
+    }
+  }, [step, timer]);
 
   const handleVerifyOtp = async () => {
     setLoading(true);
@@ -108,17 +127,17 @@ export default function Login() {
       const res = await api.post("/auth/verify-otp", {
         phone: phone.trim(),
         otp,
-        name: name.trim(),
+        name,
         password,
       });
 
       const { token, user } = res.data.data;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role);
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("role", user.role);
 
-      nav("/");
+      nav("/profile");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");
     } finally {
@@ -126,10 +145,21 @@ export default function Login() {
     }
   };
 
+  const handleResendOtp = async () => {
+    await api.post("/auth/send-otp", {
+      phone: phone.trim(),
+    });
+
+    setTimer(30);
+    setCanResend(false);
+  };
+
   const switchMode = () => {
     setIsRegister((prev) => !prev);
     setError("");
     setFieldErrors({});
+    setStep(1);
+    setOtp("");
   };
 
   return (
@@ -184,7 +214,7 @@ export default function Login() {
                   <Input
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Phone"
+                    placeholder="Enter your email"
                   />
 
                   <Input
@@ -198,8 +228,8 @@ export default function Login() {
 
               {step === 2 && (
                 <>
-                  <p className="text-sm text-gray-600 text-center">
-                    Enter OTP sent to {phone}
+                  <p className="text-sm text-center text-gray-600">
+                    OTP sent to {phone}
                   </p>
 
                   <Input
@@ -215,27 +245,31 @@ export default function Login() {
                   >
                     Verify OTP
                   </button>
+
+                  <div className="text-center text-sm">
+                    {canResend ? (
+                      <button onClick={handleResendOtp}>Resend OTP</button>
+                    ) : (
+                      <span>Resend in {timer}s</span>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-sm underline w-full"
+                  >
+                    Back
+                  </button>
                 </>
               )}
 
               {step === 1 && (
                 <button
                   type="submit"
-                  disabled={loading}
                   className="w-full py-3 rounded-2xl btn-primary font-semibold"
                 >
                   {isRegister ? "Send OTP" : "Login"}
-                </button>
-              )}
-
-              {step === 2 && (
-                <button
-                  type="button"
-                  onClick={handleVerifyOtp}
-                  disabled={loading}
-                  className="w-full py-3 rounded-2xl btn-primary font-semibold"
-                >
-                  Verify OTP
                 </button>
               )}
             </form>
