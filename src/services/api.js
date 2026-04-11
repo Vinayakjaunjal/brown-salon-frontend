@@ -77,10 +77,9 @@ export const register = async (userData) => {
 };
 
 export const forgotPassword = async (loginId) => {
-  const value = (loginId || "").trim();
-  const payload = value.includes("@")
-    ? { email: value.toLowerCase() }
-    : { phone: value };
+  const payload = {
+    email: email.trim().toLowerCase(),
+  };
 
   return apiRequest("/auth/forgot-password", {
     method: "POST",

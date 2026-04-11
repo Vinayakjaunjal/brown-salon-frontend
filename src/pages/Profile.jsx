@@ -611,6 +611,11 @@ export default function Profile() {
                           )}
                         </span>
                       </div>
+
+                      <div className="flex items-start gap-2">
+                        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-purple-600" />
+                        <span>{booking.artist?.name || "N/A"}</span>
+                      </div>
                     </div>
 
                     {booking.status === "completed" && (

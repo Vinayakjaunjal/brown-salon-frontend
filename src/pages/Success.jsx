@@ -73,6 +73,13 @@ export default function Success() {
           </div>
 
           <div className="flex justify-between text-sm">
+            <span className="text-gray-500">Artist</span>
+            <span className="font-medium text-gray-800">
+              {booking.artist?.name}
+            </span>
+          </div>
+
+          <div className="flex justify-between text-sm">
             <span className="text-gray-500">Date</span>
             <span className="font-medium text-gray-800">
               {booking.date || "Today"}

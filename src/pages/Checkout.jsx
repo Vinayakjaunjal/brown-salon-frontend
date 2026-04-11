@@ -17,7 +17,8 @@ import BackNavButton from "../components/common/BackNavButton";
 export default function Checkout() {
   const location = useLocation();
   const nav = useNavigate();
-  const { serviceId, serviceName, date, time, price } = location.state || {};
+  const { serviceId, serviceName, date, time, price, artist } =
+    location.state || {};
 
   console.log("TIME FROM STATE:", time);
   const backTarget = serviceId ? `/slots/${serviceId}` : "/services";
@@ -30,6 +31,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [artists, setArtists] = useState([]);
 
   const total = price || 0;
 
@@ -50,6 +52,12 @@ export default function Checkout() {
       })
       .catch(() => {});
   }, [resolvedServiceName, serviceId]);
+
+  useEffect(() => {
+    api.get("/artists").then((res) => setArtists(res.data));
+  }, []);
+
+  const selectedArtistObj = artists.find((a) => a._id === artist);
 
   const formattedDate = useMemo(() => {
     if (!date) return "";
@@ -111,6 +119,7 @@ export default function Checkout() {
         serviceName: resolvedServiceName,
         date,
         time,
+        artist,
         totalAmount: total,
         email: email,
         userId: user._id,
@@ -282,6 +291,12 @@ export default function Checkout() {
               <span className="text-gray-500">Service</span>
               <span className="font-medium text-right">
                 {resolvedServiceName || serviceId}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500">Artist</span>
+              <span className="font-medium text-right">
+                {selectedArtistObj?.name || "N/A"}
               </span>
             </div>
             <div className="flex items-center justify-between">

@@ -6,8 +6,8 @@ import heroImg2 from "../../assets/hero-img-2.webp";
 
 const trustStats = [
   { label: "Customer Rating", value: "4.9/5" },
-  { label: "Happy Clients", value: "12K+" },
-  { label: "Expert Stylists", value: "600+" },
+  { label: "Happy Clients", value: "2K+" },
+  { label: "Expert Stylists", value: "5+" },
 ];
 
 export default function Hero() {

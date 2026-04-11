@@ -11,7 +11,7 @@ const phoneRegex = /^\+?[0-9\s()-]{8,20}$/;
 
 export default function Login() {
   const location = useLocation();
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isRegister, setIsRegister] = useState(false);
@@ -45,10 +45,10 @@ export default function Login() {
       nextErrors.name = "Name is required";
     }
 
-    if (!phone.trim()) {
-      nextErrors.phone = "Phone or email is required";
-    } else if (!phone.includes("@")) {
-      nextErrors.phone = "Please enter a valid email";
+    if (!email.trim()) {
+      nextErrors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      nextErrors.email = "Please enter a valid email";
     }
 
     if (!password) {
@@ -78,7 +78,7 @@ export default function Login() {
       // LOGIN
       if (!isRegister) {
         const res = await api.post("/auth/login", {
-          phone: phone.trim(),
+          email: email.trim().toLocaleLowerCase(),
           password,
         });
 
@@ -94,7 +94,7 @@ export default function Login() {
 
       // REGISTER → SEND OTP
       await api.post("/auth/send-otp", {
-        phone: phone.trim(),
+        email: email.trim().toLowerCase(),
       });
 
       setStep(2);
@@ -125,7 +125,7 @@ export default function Login() {
 
     try {
       const res = await api.post("/auth/verify-otp", {
-        phone: phone.trim(),
+        email: email.trim().toLowerCase(),
         otp,
         name,
         password,
@@ -147,7 +147,7 @@ export default function Login() {
 
   const handleResendOtp = async () => {
     await api.post("/auth/send-otp", {
-      phone: phone.trim(),
+      email: email.trim().toLowerCase(),
     });
 
     setTimer(30);
@@ -212,8 +212,8 @@ export default function Login() {
                   )}
 
                   <Input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                   />
 
@@ -229,7 +229,7 @@ export default function Login() {
               {step === 2 && (
                 <>
                   <p className="text-sm text-center text-gray-600">
-                    OTP sent to {phone}
+                    OTP sent to {email}
                   </p>
 
                   <Input
@@ -273,6 +273,18 @@ export default function Login() {
                 </button>
               )}
             </form>
+
+            {!isRegister && step === 1 && (
+              <div className="text-right mt-2">
+                <button
+                  type="button"
+                  onClick={() => nav("/forgot-password")}
+                  className="text-sm text-indigo-600 hover:underline"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            )}
 
             <div className="text-center text-sm text-gray-600 mt-5">
               {isRegister

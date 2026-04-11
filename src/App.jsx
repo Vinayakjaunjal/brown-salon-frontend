@@ -29,6 +29,7 @@ const Dashboard = lazy(() => import("./admin/Dashboard.jsx"));
 const Bookings = lazy(() => import("./admin/Bookings"));
 const Customers = lazy(() => import("./admin/Customers"));
 const SlotsAdmin = lazy(() => import("./admin/Slots"));
+const Artists = lazy(() => import("./admin/Artists"));
 const Birthdays = lazy(() => import("./admin/Birthdays"));
 const Festivals = lazy(() => import("./admin/Festivals"));
 const ServicesAdmin = lazy(() => import("./admin/ServicesAdmin"));
@@ -89,6 +90,7 @@ function LayoutWrapper() {
               <Route path="reviews" element={<AdminReviews />} />
               <Route path="customers" element={<Customers />} />
               <Route path="slots" element={<SlotsAdmin />} />
+              <Route path="artists" element={<Artists />} />
               <Route path="birthdays" element={<Birthdays />} />
               <Route path="festivals" element={<Festivals />} />
             </Route>

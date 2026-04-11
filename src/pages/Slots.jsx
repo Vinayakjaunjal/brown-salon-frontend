@@ -4,6 +4,7 @@ import { CalendarDays, Clock3, Sparkles } from "lucide-react";
 import SlotButton from "../components/SlotButton";
 import BackNavButton from "../components/common/BackNavButton";
 import api from "../utils/api";
+import { io } from "socket.io-client";
 
 const TIMES = [
   "9:00 AM",
@@ -35,6 +36,8 @@ const TIMES = [
   "10:00 PM",
 ];
 
+const socket = io(import.meta.env.VITE_API_URL);
+
 const getLocalToday = () => {
   const now = new Date();
   const offset = now.getTimezoneOffset() * 60000;
@@ -60,9 +63,21 @@ export default function Slots() {
   const [selected, setSelected] = useState("");
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
+  const [artists, setArtists] = useState([]);
+  const [selectedArtist, setSelectedArtist] = useState("");
 
   const today = getLocalToday();
   const [date, setDate] = useState(today);
+
+  useEffect(() => {
+    api.get("/artists").then((res) => {
+      setArtists(res.data);
+
+      if (res.data.length > 0) {
+        setSelectedArtist(res.data[0]._id);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     api
@@ -72,17 +87,33 @@ export default function Slots() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  const fetchSlots = () => {
+    api
+      .get(`/slots/available?date=${date}&artist=${selectedArtist}`)
+      .then((res) => setSlots(res.data))
+      .catch(() => setSlots([]));
+  };
+
+  useEffect(() => {
+    const socket = io(import.meta.env.VITE_API_URL);
+
+    const room = `${date}_${selectedArtist}`;
+
+    socket.emit("joinRoom", room);
+
+    socket.on("slotUpdated", () => {
+      fetchSlots();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [date, selectedArtist]);
+
   useEffect(() => {
     if (!date) return;
-
-    api
-      .get(`/slots?date=${date}`)
-      .then((res) => {
-        console.log("DB SLOTS:", res.data);
-        setSlots(res.data);
-      })
-      .catch(() => setSlots([]));
-  }, [date]);
+    fetchSlots();
+  }, [date, selectedArtist]);
 
   useEffect(() => {
     if (!date) return;
@@ -95,19 +126,6 @@ export default function Slots() {
       })
       .catch(() => setBookings([]));
   }, [date]);
-
-  const isBlocked = (time) => {
-    const bookingBlocked = bookings.some(
-      (b) => b.date === date && b.time === time && b.status === "confirmed",
-    );
-
-    const manualBlocked = slots.some(
-      (s) =>
-        s.time === time && (s.status === "blocked" || s.status === "booked"),
-    );
-
-    return bookingBlocked || manualBlocked;
-  };
 
   const isPast = (time) => {
     if (date !== today) return false;
@@ -128,6 +146,14 @@ export default function Slots() {
     year: "numeric",
   });
 
+  const selectedArtistObj = artists.find((a) => a._id === selectedArtist);
+
+  const sortedArtists = [...artists].sort((a, b) => {
+    if (a.type === "Owner") return -1;
+    if (b.type === "Owner") return 1;
+    return 0;
+  });
+
   return (
     <div className="space-y-6">
       <BackNavButton fallback={`/services/${id}`} label="Back to Service" />
@@ -141,6 +167,39 @@ export default function Slots() {
 
       <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-5">
         <section className="bg-white p-5 rounded-2xl shadow">
+          <h3 className="font-semibold mb-2">Select Artist</h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            {sortedArtists.map((a) => (
+              <div
+                key={a._id}
+                onClick={() => setSelectedArtist(a._id)}
+                className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer 
+                ${
+                  selectedArtist === a._id
+                    ? a.type === "Owner"
+                      ? "bg-yellow-100 border-yellow-500 text-yellow-900 shadow-sm"
+                      : "bg-indigo-50 border-indigo-400 text-indigo-700 shadow-sm"
+                    : a.type === "Owner"
+                      ? "border-yellow-400 bg-yellow-50"
+                      : "border-gray-200"
+                }`}
+              >
+                <img src={a.image} className="w-10 h-10 rounded-full" />
+                <div>
+                  <p className="font-semibold flex items-center gap-2">
+                    {a.name}
+                    {a.type === "Owner" && (
+                      <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-md">
+                        ⭐ Owner
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-xs text-gray-500">{a.type}</p>
+                </div>
+              </div>
+            ))}
+          </div>
           <h2 className="font-semibold flex items-center gap-2">
             <CalendarDays /> Choose Date
           </h2>
@@ -162,18 +221,17 @@ export default function Slots() {
           </h3>
 
           <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
-            {TIMES.map((time) => {
-              const disabled = isBlocked(time) || isPast(time);
+            {slots.map((slot) => {
+              const disabled = slot.status !== "available" || isPast(slot.time);
 
               return (
                 <SlotButton
-                  key={time}
-                  time={time}
-                  selected={selected === time}
+                  key={slot.time}
+                  time={slot.time}
+                  selected={selected === slot.time}
                   disabled={disabled}
                   onClick={() => {
-                    console.log("SELECTED TIME:", time);
-                    if (!disabled) setSelected(time);
+                    if (!disabled) setSelected(slot.time);
                   }}
                 />
               );
@@ -198,6 +256,10 @@ export default function Slots() {
               <b>{selected || "Select a slot"}</b>
             </div>
             <div className="flex justify-between">
+              <span>Artist</span>
+              <b>{selectedArtistObj?.name || "Select artist"}</b>
+            </div>
+            <div className="flex justify-between">
               <span>Price</span>
               <b>₹{service.price}</b>
             </div>
@@ -213,6 +275,8 @@ export default function Slots() {
                   date,
                   time: selected,
                   price: service.price,
+                  artist: selectedArtist,
+                  artistName: selectedArtistObj?.name,
                 },
               })
             }
