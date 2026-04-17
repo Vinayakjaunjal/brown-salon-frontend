@@ -39,7 +39,6 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-violet-50/30 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* bg blobs */}
       <div className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-200/25 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-violet-200/25 rounded-full blur-3xl pointer-events-none" />
 
@@ -56,7 +55,6 @@ export default function AdminLogin() {
             <p className="text-slate-400 text-sm mt-1">Admin Panel</p>
           </div>
 
-          {/* Error snackbar */}
           {openSnackbar && (
             <div className="mb-4 flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl">
               <svg
@@ -94,7 +92,6 @@ export default function AdminLogin() {
             </div>
           )}
 
-          {/* Email or Username */}
           <div className="mb-4">
             <label className="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-1.5">
               Email or Username
@@ -109,7 +106,6 @@ export default function AdminLogin() {
             />
           </div>
 
-          {/* Password */}
           <div className="mb-2">
             <label className="block text-slate-500 text-xs font-semibold uppercase tracking-wide mb-1.5">
               Password
@@ -177,7 +173,6 @@ export default function AdminLogin() {
             </span>
           </div>
 
-          {/* Login Button */}
           <button
             onClick={login}
             disabled={loading}

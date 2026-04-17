@@ -5,15 +5,12 @@ export default function Admin() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // 🔐 SIMPLE ADMIN PROTECTION
     const isAdmin = localStorage.getItem("isAdmin");
 
     if (!isAdmin) {
       window.location.href = "/admin-login";
       return;
     }
-
-    // 📥 Fetch appointments
     fetch(`${import.meta.env.VITE_API_URL}/api/bookings/all`)
       .then((res) => res.json())
       .then((res) => {

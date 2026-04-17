@@ -1,44 +1,26 @@
-import React from "react";
-import { useState } from "react";
-import {
-  Box,
-  Paper,
-  TextField,
-  Typography,
-  Button,
-  IconButton,
-  InputAdornment,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import AdminLogo from "../assets/brown-logo.webp";
 
 export default function ResetPassword() {
   const { token } = useParams();
-  console.log("TOKEN:", token);
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [show, setShow] = useState(false);
-  const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async () => {
+    setError("");
+
     if (!password || !confirm) {
-      return setSnack({
-        open: true,
-        msg: "All fields required",
-        type: "error",
-      });
+      return setError("All fields required");
     }
 
     if (password !== confirm) {
-      return setSnack({
-        open: true,
-        msg: "Passwords do not match",
-        type: "error",
-      });
+      return setError("Passwords do not match");
     }
 
     const res = await fetch(
@@ -53,18 +35,10 @@ export default function ResetPassword() {
     const data = await res.json();
 
     if (!data.success) {
-      return setSnack({
-        open: true,
-        msg: data.message || "Reset failed",
-        type: "error",
-      });
+      return setError(data.message || "Reset failed");
     }
 
-    setSnack({
-      open: true,
-      msg: "Password reset successfully",
-      type: "success",
-    });
+    setSuccess(true);
 
     setTimeout(() => {
       navigate("/admin-login");
@@ -72,59 +46,56 @@ export default function ResetPassword() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#f5f5f5",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Paper sx={{ p: 4, width: 350 }}>
-        <Typography variant="h5" fontWeight={600} mb={2}>
-          Reset Password
-        </Typography>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-violet-50/30 flex items-center justify-center p-4">
+      <div className="w-full max-w-[360px] bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8">
 
-        <TextField
-          fullWidth
-          label="New Password"
-          type={show ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{ mb: 2 }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShow(!show)}>
-                  {show ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        <div className="flex flex-col items-center mb-6">
+          <img src={AdminLogo} className="h-20 w-20 rounded-xl mb-3" />
+          <h2 className="text-xl font-bold text-slate-800">Reset Password</h2>
+        </div>
 
-        <TextField
-          fullWidth
-          label="Confirm Password"
-          type={show ? "text" : "password"}
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          sx={{ mb: 3 }}
-        />
+        {error && (
+          <div className="mb-3 text-red-600 text-sm">{error}</div>
+        )}
 
-        <Button fullWidth variant="contained" onClick={handleSubmit}>
-          Reset Password
-        </Button>
-      </Paper>
+        {success ? (
+          <div className="text-center text-green-600">
+            ✓ Password reset successful
+          </div>
+        ) : (
+          <>
+            <input
+              type={show ? "text" : "password"}
+              placeholder="New Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2.5 border rounded-xl mb-3"
+            />
 
-      <Snackbar
-        open={snack.open}
-        autoHideDuration={3000}
-        onClose={() => setSnack({ ...snack, open: false })}
-      >
-        <Alert severity={snack.type}>{snack.msg}</Alert>
-      </Snackbar>
-    </Box>
+            <input
+              type={show ? "text" : "password"}
+              placeholder="Confirm Password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full px-4 py-2.5 border rounded-xl mb-4"
+            />
+
+            <button
+              onClick={() => setShow(!show)}
+              className="text-xs text-gray-500 mb-4"
+            >
+              {show ? "Hide Password" : "Show Password"}
+            </button>
+
+            <button
+              onClick={handleSubmit}
+              className="w-full py-2.5 bg-indigo-600 text-white rounded-xl"
+            >
+              Reset Password
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

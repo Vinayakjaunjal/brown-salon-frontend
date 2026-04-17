@@ -19,8 +19,8 @@ const Profile = lazy(() => import("./pages/Profile"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./components/landing/Gallery"));
+const ResetPasswordUser = lazy(() => import("./pages/ResetPassword"));
 
-// ================= ADMIN =================
 import ProtectedAdmin from "./admin/ProtectedAdmin";
 import AdminLayout from "./admin/AdminLayout";
 
@@ -73,6 +73,7 @@ function LayoutWrapper() {
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin-forgot" element={<AdminForgot />} />
             <Route path="/admin-reset/:token" element={<AdminReset />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordUser />} />
 
             <Route
               path="/admin/*"
