@@ -33,6 +33,11 @@ export default function Services() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Choose Your Service
         </h1>
+
+        <p className="text-sm text-gray-600 mt-2 max-w-2xl">
+          Premium salon services in Nagpur including haircut, beard styling,
+          hair spa and skin treatments at Brown Hair The Unisex Salon.
+        </p>
       </section>
 
       <div className="flex gap-2 mb-4 flex-wrap">

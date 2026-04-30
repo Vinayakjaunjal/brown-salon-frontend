@@ -30,8 +30,8 @@ export default function Hero() {
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-gray-600 max-w-xl">
-            Visit Brown Salon for professional haircuts, grooming, skincare, and
-            beauty services from experienced stylists..
+            Visit Brown Salon in Nagpur for expert haircuts, beard styling and
+            beauty services. Enjoy premium grooming in a modern, hygienic space.
           </p>
 
           <div className="mt-7 flex flex-col sm:flex-row gap-3">
@@ -72,7 +72,7 @@ export default function Hero() {
           <div className="col-span-2 rounded-2xl overflow-hidden shadow-soft h-52 sm:h-64">
             <img
               src={heroImg1}
-              alt="Salon services"
+              alt="Best salon in Nagpur for haircut and grooming"
               className="w-full h-full object-cover"
               loading="eager"
               fetchpriority="high"
@@ -84,7 +84,7 @@ export default function Hero() {
           <div className="rounded-2xl overflow-hidden shadow-soft h-36 sm:h-40 bg-white">
             <img
               src={heroImg2}
-              alt="Hair styling"
+              alt="Hair styling and beard grooming in Nagpur salon"
               className="w-full h-full object-cover"
               loading="eager"
               width="400"
