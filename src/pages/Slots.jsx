@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { CalendarDays, Clock3, Sparkles } from "lucide-react";
+import { CalendarDays, Clock3, UserRound } from "lucide-react";
 import SlotButton from "../components/SlotButton";
 import BackNavButton from "../components/common/BackNavButton";
 import api from "../utils/api";
@@ -52,6 +52,27 @@ const toMinutes = (time) => {
   if (meridian === "AM" && h === 12) h = 0;
 
   return h * 60 + m;
+};
+
+const ArtistAvatar = ({ artist }) => {
+  const [imageError, setImageError] = useState(false);
+
+  if (artist.image && !imageError) {
+    return (
+      <img
+        src={artist.image}
+        alt={artist.name}
+        onError={() => setImageError(true)}
+        className="w-10 h-10 rounded-full object-cover shrink-0 border border-gray-200"
+      />
+    );
+  }
+
+  return (
+    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-50 to-violet-100 border border-indigo-100 flex items-center justify-center shrink-0">
+      <UserRound className="w-5 h-5 text-indigo-400" strokeWidth={1.8} />
+    </div>
+  );
 };
 
 export default function Slots() {
@@ -185,7 +206,7 @@ export default function Slots() {
                       : "border-gray-200"
                 }`}
               >
-                <img src={a.image} className="w-10 h-10 rounded-full" />
+                <ArtistAvatar artist={a} />
                 <div>
                   <p className="font-semibold flex items-center gap-2">
                     {a.name}

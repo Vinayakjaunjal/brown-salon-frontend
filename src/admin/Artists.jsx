@@ -1,10 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { UserRound } from "lucide-react";
 
 const getInitials = (name = "") => {
   const w = name.trim().split(" ");
   return w.length === 1
     ? w[0][0]?.toUpperCase()
     : w[0][0]?.toUpperCase() + w[w.length - 1][0]?.toUpperCase();
+};
+
+const ArtistAvatar = ({ artist, size = "w-12 h-12" }) => {
+  const [imageError, setImageError] = useState(false);
+
+  if (artist.image && !imageError) {
+    return (
+      <img
+        src={artist.image}
+        alt={artist.name}
+        onError={() => setImageError(true)}
+        className={`${size} rounded-full object-cover shrink-0 border border-slate-200`}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`${size} rounded-full bg-gradient-to-br from-indigo-50 to-violet-100 border border-indigo-100 flex items-center justify-center shrink-0`}
+    >
+      <UserRound className="w-1/2 h-1/2 text-indigo-400" strokeWidth={1.8} />
+    </div>
+  );
 };
 
 export default function Artists() {
@@ -149,17 +173,7 @@ export default function Artists() {
             className="flex justify-between items-center px-5 py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50/40 transition-colors"
           >
             <div className="flex items-center gap-3">
-              {a.image ? (
-                <img
-                  src={a.image}
-                  alt=""
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600">
-                  {getInitials(a.name)}
-                </div>
-              )}
+              <ArtistAvatar artist={a} size="w-12 h-12" />
               <div>
                 <p className="text-slate-700 font-semibold text-sm">{a.name}</p>
                 <p className="text-slate-500 text-xs mt-0.5">{a.type}</p>
@@ -228,17 +242,7 @@ export default function Artists() {
             className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
           >
             <div className="flex items-center gap-3 mb-3">
-              {a.image ? (
-                <img
-                  src={a.image}
-                  alt=""
-                  className="w-11 h-11 rounded-full object-cover shrink-0"
-                />
-              ) : (
-                <div className="w-11 h-11 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-600 shrink-0">
-                  {getInitials(a.name)}
-                </div>
-              )}
+              <ArtistAvatar artist={a} size="w-11 h-11" />
               <div>
                 <p className="text-slate-700 font-semibold text-sm">{a.name}</p>
                 <p className="text-slate-500 text-xs mt-0.5">{a.type}</p>
