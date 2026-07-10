@@ -201,21 +201,23 @@ export default function Dashboard() {
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50/60 border-b border-slate-100">
-                {["Name", "Service", "Date", "Time", "Status"].map((h) => (
-                  <th
-                    key={h}
-                    className="text-left text-slate-400 text-xs font-semibold uppercase tracking-wide px-5 py-3"
-                  >
-                    {h}
-                  </th>
-                ))}
+                {["Name", "Service", "Artist", "Date", "Time", "Status"].map(
+                  (h) => (
+                    <th
+                      key={h}
+                      className="text-left text-slate-400 text-xs font-semibold uppercase tracking-wide px-5 py-3"
+                    >
+                      {h}
+                    </th>
+                  ),
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {recentAppointments.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-10 text-slate-400 text-sm"
                   >
                     No recent appointments
