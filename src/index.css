@@ -125,23 +125,20 @@ body {
    Swiper Pagination
 ========================== */
 
+/* Swiper Pagination */
 .swiper-pagination {
   position: relative !important;
-  margin-top: 30px !important;
+  margin-top: 12px !important;
 }
 
 .swiper-pagination-bullet {
   width: 10px;
   height: 10px;
-  background: #d1d5db;
-  opacity: 1;
-  transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
   width: 24px;
   border-radius: 999px;
-  background: #d4a017;
 }
 
 /*========================== */

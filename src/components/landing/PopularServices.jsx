@@ -100,12 +100,11 @@ export default function PopularServices() {
                 <img
                   src={service.image}
                   alt={service.title}
-                  loading="lazy"
-                  className="w-full h-[360px] object-cover"
+                  className="w-full aspect-[4/5] object-cover rounded-xl"
                 />
               </div>
 
-              <h3 className="mt-5 text-center text-lg font-semibold uppercase tracking-wide text-gray-900">
+              <h3 className="mt-3 text-xl font-semibold tracking-wide text-center">
                 {service.title}
               </h3>
             </div>
