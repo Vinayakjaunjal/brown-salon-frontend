@@ -1,61 +1,117 @@
 import React from "react";
-import haircut from "../../assets/pop-img-hair.webp";
-import beard from "../../assets/pop-img-beard.webp";
-import facial from "../../assets/pop-img-facial.webp";
-import spa from "../../assets/pop-img-spa.webp";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
+import beard from "../../assets/pop-beard-grooming.webp";
+import dtan from "../../assets/pop-d-tan.webp";
+import haircolor from "../../assets/pop-hair-coloring.webp";
+import hairsmooth from "../../assets/pop-hair-smoothing.webp";
+import spa from "../../assets/pop-hair-spa.webp";
+import haircut from "../../assets/pop-haircut-styling.webp";
+import massage from "../../assets/pop-head-massage.webp";
+import keratin from "../../assets/pop-keratin-treatment.webp";
 
 const featuredServices = [
   {
     title: "Haircut & Styling",
-    description: "Professional haircut and modern styling at your home.",
     image: haircut,
   },
   {
+    title: "Hair Coloring",
+    image: haircolor,
+  },
+  {
+    title: "Hair Spa",
+    image: spa,
+  },
+  {
+    title: "Keratin Treatment",
+    image: keratin,
+  },
+  {
     title: "Beard Grooming",
-    description: "Clean beard shaping and premium grooming experience.",
     image: beard,
   },
   {
-    title: "Facial & Skin Care",
-    description: "Relaxing facial treatments for glowing healthy skin.",
-    image: facial,
+    title: "Hair Smoothing",
+    image: hairsmooth,
   },
   {
-    title: "Hair Spa Treatment",
-    description: "Deep nourishment and scalp care for strong hair.",
-    image: spa,
+    title: "Head Massage",
+    image: massage,
+  },
+  {
+    title: "D-Tan & Cleanup",
+    image: dtan,
   },
 ];
 
 export default function PopularServices() {
   return (
-    <section>
-      <h2 className="text-2xl sm:text-3xl font-bold mb-6">Popular Services</h2>
+    <section className="py-16">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-semibold uppercase tracking-wide text-gray-900">
+          Popular Services
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div className="w-28 h-0.5 bg-amber-500 mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <Swiper
+        modules={[Autoplay, Pagination]}
+        slidesPerView={4}
+        spaceBetween={20}
+        loop={true}
+        speed={800}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+            spaceBetween: 15,
+          },
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 18,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 20,
+          },
+        }}
+      >
         {featuredServices.map((service) => (
-          <div
-            key={service.title}
-            className="rounded-2xl overflow-hidden shadow-soft"
-          >
-            <img
-              src={service.image}
-              alt={service.title}
-              className="h-44 w-full object-cover"
-              loading="lazy"
-              width="400"
-              height="300"
-            />
+          <SwiperSlide key={service.title}>
+            <div>
+              <div className="overflow-hidden rounded-xl shadow-md">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  loading="lazy"
+                  className="w-full h-[360px] object-cover"
+                />
+              </div>
 
-            <div className="p-4">
-              <h3 className="font-semibold text-lg text-gray-900">
+              <h3 className="mt-5 text-center text-lg font-semibold uppercase tracking-wide text-gray-900">
                 {service.title}
               </h3>
-              <p className="text-sm text-gray-700">{service.description}</p>
             </div>
-          </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </section>
   );
 }
