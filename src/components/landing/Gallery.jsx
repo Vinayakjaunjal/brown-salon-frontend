@@ -21,53 +21,85 @@ export default function Gallery() {
         <title>Gallery | Brown Hair The Unisex Salon</title>
         <meta
           name="description"
-          content="Explore the gallery of Brown Hair The Unisex Salon."
+          content="Explore the gallery of Brown Hair The Unisex Salon. View our latest haircuts, beard grooming, hair color, hair spa, salon ambience and behind the scenes."
         />
       </Helmet>
 
-      <section className="py-16 md:py-20 bg-white">
-        {/* Heading */}
-        <div className="max-w-5xl mx-auto px-4 md:px-5">
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-light tracking-[0.15em] uppercase text-center">
             Our Work
           </h2>
 
           <div className="w-20 h-[1px] bg-[#C89B5D] mx-auto mt-5 mb-10"></div>
 
-          <div className="flex justify-center gap-7 md:gap-12 mb-10 md:mb-12">
+          {/* Tabs */}
+          <div className="flex justify-center gap-10 md:gap-16 mb-8">
             {["work", "bts", "ambience"].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActive(cat)}
-                className={`uppercase text-xs md:text-sm tracking-[0.15em] pb-2 transition-all duration-300 ${
-                  active === cat
-                    ? "text-[#C89B5D] border-b border-[#C89B5D]"
-                    : "text-gray-600 hover:text-[#C89B5D]"
-                }`}
+                className={`
+                  uppercase
+                  text-sm
+                  md:text-base
+                  tracking-[0.2em]
+                  font-medium
+                  pb-2
+                  border-b-2
+                  transition-all
+                  duration-300
+
+                  ${
+                    active === cat
+                      ? "text-[#C89B5D] border-[#C89B5D]"
+                      : "text-gray-800 border-transparent hover:text-[#C89B5D]"
+                  }
+                `}
               >
                 {cat}
               </button>
             ))}
           </div>
-        </div>
 
-        {/* Wider gallery container like Apple */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
+          {/* Grid: 2 cols on mobile, jumps straight to 4 cols on desktop (matches reference) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2">
             {filteredImages.map((img, index) => (
               <div
                 key={index}
                 onClick={() => setLightbox(img.image)}
-                className="relative overflow-hidden cursor-pointer group bg-neutral-100"
+                className="
+                relative
+                overflow-hidden
+                cursor-pointer
+                group
+                "
               >
                 <img
                   src={img.image}
                   alt="Brown Hair The Unisex Salon"
                   loading="lazy"
-                  className="w-full aspect-[4/5] object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
+                  className="
+                  w-full
+                  aspect-[4/5]
+                  object-cover
+                  transition-all
+                  duration-500
+                  ease-out
+                  group-hover:scale-105
+                  "
                 />
 
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500"></div>
+                <div
+                  className="
+                  absolute
+                  inset-0
+                  bg-black/0
+                  group-hover:bg-black/25
+                  transition-all
+                  duration-500
+                  "
+                ></div>
               </div>
             ))}
           </div>
@@ -77,28 +109,53 @@ export default function Gallery() {
               No images available.
             </p>
           )}
-        </div>
 
-        {lightbox && (
-          <div
-            onClick={() => setLightbox(null)}
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
-          >
-            <button
+          {lightbox && (
+            <div
               onClick={() => setLightbox(null)}
-              className="absolute top-6 right-6 text-white text-4xl hover:text-[#C89B5D]"
+              className="
+              fixed
+              inset-0
+              bg-black/90
+              backdrop-blur-sm
+              flex
+              items-center
+              justify-center
+              z-[9999]
+              p-4
+              "
             >
-              ×
-            </button>
+              <button
+                onClick={() => setLightbox(null)}
+                className="
+                absolute
+                top-6
+                right-6
+                text-white
+                text-4xl
+                leading-none
+                hover:text-[#C89B5D]
+                transition
+                "
+              >
+                ×
+              </button>
 
-            <img
-              src={lightbox}
-              alt="Brown Hair The Unisex Salon"
-              onClick={(e) => e.stopPropagation()}
-              className="max-w-[95vw] max-h-[90vh] object-contain rounded-md shadow-2xl"
-            />
-          </div>
-        )}
+              <img
+                src={lightbox}
+                alt="Brown Hair The Unisex Salon"
+                onClick={(e) => e.stopPropagation()}
+                className="
+                max-w-[95vw]
+                max-h-[90vh]
+                object-contain
+                rounded-md
+                shadow-2xl
+                "
+              />
+            </div>
+          )}
+        </div>
       </section>
     </>
   );
