@@ -73,10 +73,16 @@ export default function Gallery() {
               >
                 <img
                   src={img.image}
+                  alt="Brown Hair The Unisex Salon"
+                  loading="lazy"
                   className="
                   w-full
-                  aspect-[3/4]
+                  h-[255px]
+                  sm:h-[300px]
+                  md:h-[340px]
+                  lg:h-[360px]
                   object-cover
+                  object-center
                   transition-all
                   duration-500
                   group-hover:scale-105"
