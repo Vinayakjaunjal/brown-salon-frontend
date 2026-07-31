@@ -26,7 +26,7 @@ export default function Gallery() {
       </Helmet>
 
       <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-5">
           <h2 className="text-4xl md:text-5xl font-light tracking-[0.15em] uppercase text-center">
             Our Work
           </h2>
@@ -34,26 +34,25 @@ export default function Gallery() {
           <div className="w-20 h-[1px] bg-[#C89B5D] mx-auto mt-5 mb-10"></div>
 
           {/* Tabs */}
-          <div className="flex justify-center gap-10 md:gap-16 mb-8">
+
+          <div className="flex justify-center gap-8 md:gap-12 mb-10">
             {["work", "bts", "ambience"].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActive(cat)}
                 className={`
                   uppercase
-                  text-sm
-                  md:text-base
-                  tracking-[0.2em]
-                  font-medium
+                  text-xs
+                  md:text-sm
+                  tracking-[0.25em]
                   pb-2
-                  border-b-2
                   transition-all
                   duration-300
 
                   ${
                     active === cat
-                      ? "text-[#C89B5D] border-[#C89B5D]"
-                      : "text-gray-800 border-transparent hover:text-[#C89B5D]"
+                      ? "text-[#C89B5D] border-b border-[#C89B5D]"
+                      : "text-gray-600 hover:text-[#C89B5D]"
                   }
                 `}
               >
@@ -62,8 +61,8 @@ export default function Gallery() {
             ))}
           </div>
 
-          {/* Grid: 2 cols on mobile, jumps straight to 4 cols on desktop (matches reference) */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2">
+          {/* Grid: 2 columns on mobile, 4 columns from md breakpoint up (matches Apple Salon reference) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
             {filteredImages.map((img, index) => (
               <div
                 key={index}
@@ -81,6 +80,7 @@ export default function Gallery() {
                   loading="lazy"
                   className="
                   w-full
+                  h-full
                   aspect-[4/5]
                   object-cover
                   transition-all
