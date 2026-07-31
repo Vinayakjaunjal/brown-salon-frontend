@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
-  const [lightbox, setLightbox] = useState(null);
-  const [active, setActive] = useState("work");
+  const [activeTab, setActiveTab] = useState("work");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/gallery`)
@@ -13,60 +13,132 @@ export default function Gallery() {
       .catch(() => setImages([]));
   }, []);
 
-  const filteredImages = images.filter((img) => img.category === active);
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+
+    if (selectedImage) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedImage]);
+
+  const filteredImages = images.filter((img) => img.category === activeTab);
 
   return (
     <>
       <Helmet>
         <title>Gallery | Brown Hair The Unisex Salon</title>
+
         <meta
           name="description"
-          content="Explore the gallery of Brown Hair The Unisex Salon. View our latest haircuts, beard grooming, hair color, hair spa, salon ambience and behind the scenes."
+          content="Explore our latest hairstyles, beard styling, salon ambience and behind the scenes."
         />
       </Helmet>
 
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-5">
-          <h2 className="text-4xl md:text-5xl font-light tracking-[0.15em] uppercase text-center">
+      <section className="bg-white pt-14 md:pt-20 pb-16">
+        {/* Heading */}
+
+        <div className="max-w-5xl mx-auto px-5">
+          <h2
+            className="
+            text-center
+            uppercase
+            font-light
+            tracking-[0.16em]
+            text-[34px]
+            md:text-[56px]
+            "
+          >
             Our Work
           </h2>
 
-          <div className="w-20 h-[1px] bg-[#C89B5D] mx-auto mt-5 mb-10"></div>
+          <div
+            className="
+            w-24
+            h-px
+            bg-[#C89B5D]
+            mx-auto
+            mt-6
+            mb-10
+            "
+          />
 
           {/* Tabs */}
 
-          <div className="flex justify-center gap-8 md:gap-12 mb-10">
-            {["work", "bts", "ambience"].map((cat) => (
+          <div
+            className="
+            flex
+            justify-center
+            gap-8
+            md:gap-12
+            mb-10
+            "
+          >
+            {["work", "bts", "ambience"].map((tab) => (
               <button
-                key={cat}
-                onClick={() => setActive(cat)}
+                key={tab}
+                onClick={() => setActiveTab(tab)}
                 className={`
                   uppercase
-                  text-xs
+                  text-[11px]
                   md:text-sm
-                  tracking-[0.25em]
+                  tracking-[0.18em]
                   pb-2
                   transition-all
                   duration-300
 
                   ${
-                    active === cat
+                    activeTab === tab
                       ? "text-[#C89B5D] border-b border-[#C89B5D]"
-                      : "text-gray-600 hover:text-[#C89B5D]"
+                      : "text-neutral-600 hover:text-[#C89B5D]"
                   }
                 `}
               >
-                {cat}
+                {tab}
               </button>
             ))}
           </div>
+        </div>
 
-          {/* Grid: 2 columns on mobile, 4 columns from md breakpoint up (matches Apple Salon reference) */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
+        {/* Apple Style Gallery */}
+
+        <div
+          className="
+          w-full
+          px-[8px]
+          md:px-8
+          "
+        >
+          <div
+            className="
+            max-w-[1500px]
+            mx-auto
+
+            grid
+
+            grid-cols-2
+            md:grid-cols-3
+            lg:grid-cols-4
+
+            gap-[6px]
+            md:gap-3
+            "
+          >
             {filteredImages.map((img, index) => (
               <div
                 key={index}
-                onClick={() => setLightbox(img.image)}
+                onClick={() => setSelectedImage(img.image)}
                 className="
                 relative
                 overflow-hidden
@@ -80,26 +152,34 @@ export default function Gallery() {
                   loading="lazy"
                   className="
                   w-full
-                  h-full
+
                   aspect-[4/5]
+
                   object-cover
+                  object-center
+
                   transition-all
                   duration-500
-                  ease-out
-                  group-hover:scale-105
+
+                  group-hover:scale-[1.05]
                   "
                 />
+
+                {/* Apple Overlay */}
 
                 <div
                   className="
                   absolute
                   inset-0
+
                   bg-black/0
-                  group-hover:bg-black/25
+
+                  group-hover:bg-black/20
+
                   transition-all
                   duration-500
                   "
-                ></div>
+                />
               </div>
             ))}
           </div>
@@ -109,53 +189,153 @@ export default function Gallery() {
               No images available.
             </p>
           )}
-
-          {lightbox && (
-            <div
-              onClick={() => setLightbox(null)}
-              className="
-              fixed
-              inset-0
-              bg-black/90
-              backdrop-blur-sm
-              flex
-              items-center
-              justify-center
-              z-[9999]
-              p-4
-              "
-            >
-              <button
-                onClick={() => setLightbox(null)}
-                className="
-                absolute
-                top-6
-                right-6
-                text-white
-                text-4xl
-                leading-none
-                hover:text-[#C89B5D]
-                transition
-                "
-              >
-                ×
-              </button>
-
-              <img
-                src={lightbox}
-                alt="Brown Hair The Unisex Salon"
-                onClick={(e) => e.stopPropagation()}
-                className="
-                max-w-[95vw]
-                max-h-[90vh]
-                object-contain
-                rounded-md
-                shadow-2xl
-                "
-              />
-            </div>
-          )}
         </div>
+
+        {/* PART 2 STARTS FROM HERE */}
+
+        {/* Apple Home Gallery */}
+
+        <div className="w-full px-[6px] sm:px-3 md:px-8">
+          <div
+            className="
+      mx-auto
+      max-w-[1700px]
+
+      grid
+      grid-cols-2
+      md:grid-cols-3
+      lg:grid-cols-4
+
+      gap-[6px]
+      md:gap-3
+    "
+          >
+            {loading
+              ? Array.from({ length: 8 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="
+            w-full
+            aspect-[4/5]
+            bg-neutral-200
+            animate-pulse
+          "
+                  />
+                ))
+              : galleryImages.map((img, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedImage(img.image)}
+                    className="
+            relative
+            overflow-hidden
+            cursor-pointer
+            group
+          "
+                  >
+                    <img
+                      src={img.image}
+                      alt="Brown Hair The Unisex Salon"
+                      loading="lazy"
+                      className="
+              w-full
+              aspect-[4/5]
+
+              object-cover
+              object-center
+
+              transition-transform
+              duration-500
+              ease-out
+
+              group-hover:scale-[1.05]
+            "
+                    />
+
+                    {/* Apple Overlay */}
+
+                    <div
+                      className="
+              absolute
+              inset-0
+
+              bg-black/0
+
+              group-hover:bg-black/20
+
+              transition-all
+              duration-500
+            "
+                    />
+                  </div>
+                ))}
+          </div>
+        </div>
+
+        {/* Lightbox Starts In Part 3 */}
+        {/* Lightbox */}
+
+        {selectedImage && (
+          <div
+            className="
+      fixed
+      inset-0
+      z-[9999]
+
+      bg-black/90
+
+      flex
+      items-center
+      justify-center
+
+      p-4
+    "
+            onClick={() => setSelectedImage(null)}
+          >
+            {/* Close Button */}
+
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="
+        absolute
+        top-5
+        right-5
+
+        text-white
+        text-4xl
+        leading-none
+
+        hover:text-[#C89B5D]
+
+        transition-colors
+        duration-300
+      "
+              aria-label="Close"
+            >
+              ×
+            </button>
+
+            {/* Image */}
+
+            <img
+              src={selectedImage}
+              alt="Gallery Preview"
+              onClick={(e) => e.stopPropagation()}
+              className="
+        max-w-full
+        max-h-[90vh]
+
+        object-contain
+
+        rounded-sm
+
+        shadow-2xl
+
+        animate-[fadeIn_.35s_ease]
+      "
+            />
+          </div>
+        )}
       </section>
     </>
   );
