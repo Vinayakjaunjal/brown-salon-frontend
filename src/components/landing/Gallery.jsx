@@ -5,12 +5,27 @@ export default function Gallery() {
   const [images, setImages] = useState([]);
   const [activeTab, setActiveTab] = useState("work");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/gallery`)
-      .then((res) => res.json())
-      .then((data) => setImages(data))
-      .catch(() => setImages([]));
+    const fetchGallery = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/gallery`);
+
+        const data = await res.json();
+
+        setImages(data);
+      } catch (error) {
+        console.error("Gallery Error:", error);
+        setImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
   }, []);
 
   useEffect(() => {
@@ -42,47 +57,38 @@ export default function Gallery() {
 
         <meta
           name="description"
-          content="Explore our latest hairstyles, beard styling, salon ambience and behind the scenes."
+          content="Explore premium hairstyles, beard grooming, salon ambience and behind the scenes at Brown Hair The Unisex Salon."
         />
       </Helmet>
 
-      <section className="bg-white pt-14 md:pt-20 pb-16">
+      <section className="bg-white pt-14 md:pt-20 pb-20">
         {/* Heading */}
 
         <div className="max-w-5xl mx-auto px-5">
           <h2
             className="
-            text-center
-            uppercase
-            font-light
-            tracking-[0.16em]
-            text-[34px]
-            md:text-[56px]
+              text-center
+              uppercase
+              font-light
+              tracking-[0.16em]
+              text-[34px]
+              md:text-[56px]
             "
           >
             Our Work
           </h2>
 
-          <div
-            className="
-            w-24
-            h-px
-            bg-[#C89B5D]
-            mx-auto
-            mt-6
-            mb-10
-            "
-          />
+          <div className="w-24 h-px bg-[#C89B5D] mx-auto mt-6 mb-10"></div>
 
           {/* Tabs */}
 
           <div
             className="
-            flex
-            justify-center
-            gap-8
-            md:gap-12
-            mb-10
+              flex
+              justify-center
+              gap-8
+              md:gap-12
+              mb-10
             "
           >
             {["work", "bts", "ambience"].map((tab) => (
@@ -111,164 +117,109 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* Apple Style Gallery */}
-
-        <div
-          className="
-          w-full
-          px-[8px]
-          md:px-8
-          "
-        >
-          <div
-            className="
-            max-w-[1500px]
-            mx-auto
-
-            grid
-
-            grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4
-
-            gap-[6px]
-            md:gap-3
-            "
-          >
-            {filteredImages.map((img, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedImage(img.image)}
-                className="
-                relative
-                overflow-hidden
-                cursor-pointer
-                group
-                "
-              >
-                <img
-                  src={img.image}
-                  alt="Brown Hair The Unisex Salon"
-                  loading="lazy"
-                  className="
-                  w-full
-
-                  aspect-[4/5]
-
-                  object-cover
-                  object-center
-
-                  transition-all
-                  duration-500
-
-                  group-hover:scale-[1.05]
-                  "
-                />
-
-                {/* Apple Overlay */}
-
-                <div
-                  className="
-                  absolute
-                  inset-0
-
-                  bg-black/0
-
-                  group-hover:bg-black/20
-
-                  transition-all
-                  duration-500
-                  "
-                />
-              </div>
-            ))}
-          </div>
-
-          {filteredImages.length === 0 && (
-            <p className="text-center text-gray-500 mt-10">
-              No images available.
-            </p>
-          )}
-        </div>
-
-        {/* PART 2 STARTS FROM HERE */}
-
+        {/* Gallery Grid Starts In Part 2 */}
         {/* Apple Home Gallery */}
 
-        <div className="w-full px-[6px] sm:px-3 md:px-8">
+        <div className="w-full px-[8px] md:px-8">
           <div
             className="
-      mx-auto
-      max-w-[1700px]
+              max-w-[1600px]
+              mx-auto
 
-      grid
-      grid-cols-2
-      md:grid-cols-3
-      lg:grid-cols-4
+              grid
+              grid-cols-2
+              md:grid-cols-3
+              lg:grid-cols-4
 
-      gap-[6px]
-      md:gap-3
-    "
+              gap-[6px]
+              md:gap-3
+            "
           >
-            {loading
-              ? Array.from({ length: 8 }).map((_, index) => (
-                  <div
-                    key={index}
+            {loading ? (
+              Array.from({ length: 8 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="
+                    w-full
+                    aspect-[4/5]
+                    bg-gray-200
+                    animate-pulse
+                  "
+                />
+              ))
+            ) : filteredImages.length > 0 ? (
+              filteredImages.map((img, index) => (
+                <div
+                  key={index}
+                  onClick={() => setSelectedImage(img.image)}
+                  className="
+                    relative
+                    overflow-hidden
+                    cursor-pointer
+                    group
+                  "
+                >
+                  <img
+                    src={img.image}
+                    alt={img.title || "Brown Hair The Unisex Salon"}
+                    loading="lazy"
                     className="
-            w-full
-            aspect-[4/5]
-            bg-neutral-200
-            animate-pulse
-          "
+                      w-full
+                      aspect-[4/5]
+
+                      object-cover
+                      object-center
+
+                      transition-transform
+                      duration-500
+                      ease-out
+
+                      group-hover:scale-105
+                    "
                   />
-                ))
-              : galleryImages.map((img, index) => (
+
+                  {/* Overlay */}
+
                   <div
-                    key={index}
-                    onClick={() => setSelectedImage(img.image)}
                     className="
-            relative
-            overflow-hidden
-            cursor-pointer
-            group
-          "
+                      absolute
+                      inset-0
+
+                      bg-black/0
+                      group-hover:bg-black/20
+
+                      transition-all
+                      duration-500
+                    "
+                  />
+
+                  {/* Optional Zoom Icon */}
+
+                  <div
+                    className="
+                      absolute
+                      inset-0
+
+                      flex
+                      items-center
+                      justify-center
+
+                      opacity-0
+                      group-hover:opacity-100
+
+                      transition-all
+                      duration-500
+                    "
                   >
-                    <img
-                      src={img.image}
-                      alt="Brown Hair The Unisex Salon"
-                      loading="lazy"
-                      className="
-              w-full
-              aspect-[4/5]
-
-              object-cover
-              object-center
-
-              transition-transform
-              duration-500
-              ease-out
-
-              group-hover:scale-[1.05]
-            "
-                    />
-
-                    {/* Apple Overlay */}
-
-                    <div
-                      className="
-              absolute
-              inset-0
-
-              bg-black/0
-
-              group-hover:bg-black/20
-
-              transition-all
-              duration-500
-            "
-                    />
+                    <span className="text-white text-3xl font-light">+</span>
                   </div>
-                ))}
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full py-16 text-center text-gray-500">
+                No images available.
+              </div>
+            )}
           </div>
         </div>
 
@@ -278,18 +229,18 @@ export default function Gallery() {
         {selectedImage && (
           <div
             className="
-      fixed
-      inset-0
-      z-[9999]
+              fixed
+              inset-0
+              z-[9999]
 
-      bg-black/90
+              bg-black/90
 
-      flex
-      items-center
-      justify-center
+              flex
+              items-center
+              justify-center
 
-      p-4
-    "
+              p-4
+            "
             onClick={() => setSelectedImage(null)}
           >
             {/* Close Button */}
@@ -297,22 +248,28 @@ export default function Gallery() {
             <button
               onClick={() => setSelectedImage(null)}
               className="
-        absolute
-        top-5
-        right-5
+                absolute
+                top-5
+                right-5
 
-        text-white
-        text-4xl
-        leading-none
+                w-12
+                h-12
 
-        hover:text-[#C89B5D]
+                flex
+                items-center
+                justify-center
 
-        transition-colors
-        duration-300
-      "
+                text-white
+                text-4xl
+
+                hover:text-[#C89B5D]
+
+                transition-colors
+                duration-300
+              "
               aria-label="Close"
             >
-              ×
+              &times;
             </button>
 
             {/* Image */}
@@ -322,20 +279,22 @@ export default function Gallery() {
               alt="Gallery Preview"
               onClick={(e) => e.stopPropagation()}
               className="
-        max-w-full
-        max-h-[90vh]
+                max-w-full
+                max-h-[90vh]
 
-        object-contain
+                object-contain
 
-        rounded-sm
+                rounded
 
-        shadow-2xl
+                shadow-2xl
 
-        animate-[fadeIn_.35s_ease]
-      "
+                select-none
+              "
             />
           </div>
         )}
+
+        {/* Closing Part Comes In Part 4 */}
       </section>
     </>
   );
