@@ -26,14 +26,12 @@ export default function Gallery() {
       </Helmet>
 
       <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-5">
+        <div className="max-w-6xl mx-auto px-4 md:px-5">
           <h2 className="text-4xl md:text-5xl font-light tracking-[0.15em] uppercase text-center">
             Our Work
           </h2>
 
           <div className="w-20 h-[1px] bg-[#C89B5D] mx-auto mt-5 mb-10"></div>
-
-          {/* Tabs */}
 
           <div className="flex justify-center gap-8 md:gap-12 mb-12">
             {["work", "bts", "ambience"].map((cat) => (
@@ -61,7 +59,7 @@ export default function Gallery() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
             {filteredImages.map((img, index) => (
               <div
                 key={index}
@@ -75,17 +73,13 @@ export default function Gallery() {
               >
                 <img
                   src={img.image}
-                  alt="Brown Hair The Unisex Salon"
-                  loading="lazy"
                   className="
                   w-full
-                  aspect-[4/5]
+                  aspect-[3/4]
                   object-cover
                   transition-all
                   duration-500
-                  ease-out
-                  group-hover:scale-105
-                  "
+                  group-hover:scale-105"
                 />
 
                 <div
