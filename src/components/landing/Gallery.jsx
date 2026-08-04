@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { Star, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
-  const [activeTab, setActiveTab] = useState("work");
-  const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,27 +28,8 @@ export default function Gallery() {
     fetchGallery();
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setSelectedImage(null);
-      }
-    };
-
-    if (selectedImage) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedImage]);
-
-  const filteredImages = images.filter((img) => img.category === activeTab);
+  // Duplicate the list so the marquee loop feels seamless
+  const marqueeImages = [...images, ...images];
 
   return (
     <>
@@ -61,240 +42,107 @@ export default function Gallery() {
         />
       </Helmet>
 
-      <section className="bg-white pt-14 md:pt-20 pb-20">
+      <style>{`
+        @keyframes gallery-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .gallery-marquee-track {
+          animation: gallery-marquee 35s linear infinite;
+        }
+        .gallery-marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <section className="bg-white pt-10 md:pt-12 pb-20 overflow-hidden">
         {/* Heading */}
 
-        <div className="max-w-5xl mx-auto px-5">
-          <h2
-            className="
-              text-center
-              uppercase
-              font-light
-              tracking-[0.16em]
-              text-[34px]
-              md:text-[56px]
-            "
-          >
-            Our Work
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 text-center">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-amber-600 mb-4">
+            <Star size={14} className="fill-amber-500 text-amber-500" />
+            Showcase
+          </span>
+
+          <h2 className="font-serif text-gray-900 text-4xl md:text-6xl tracking-wide">
+            Our{" "}
+            <span className="italic bg-gradient-to-r from-amber-500 to-amber-700 bg-clip-text text-transparent">
+              Work
+            </span>
           </h2>
 
-          <div className="w-24 h-px bg-[#C89B5D] mx-auto mt-6 mb-10"></div>
-
-          {/* Tabs */}
-
-          <div
-            className="
-              flex
-              justify-center
-              gap-8
-              md:gap-12
-              mb-10
-            "
-          >
-            {["work", "bts", "ambience"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`
-                  uppercase
-                  text-[11px]
-                  md:text-sm
-                  tracking-[0.18em]
-                  pb-2
-                  transition-all
-                  duration-300
-
-                  ${
-                    activeTab === tab
-                      ? "text-[#C89B5D] border-b border-[#C89B5D]"
-                      : "text-neutral-600 hover:text-[#C89B5D]"
-                  }
-                `}
-              >
-                {tab}
-              </button>
-            ))}
+          <div className="flex items-center justify-center gap-3 mt-6 mb-10">
+            <span className="h-px w-10 bg-amber-300" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            <span className="h-px w-10 bg-amber-300" />
           </div>
         </div>
 
-        {/* Gallery Grid Starts In Part 2 */}
-        {/* Apple Home Gallery */}
+        {/* Continuous scrolling gallery row */}
 
-        <div className="w-full px-[8px] md:px-8">
-          <div
-            className="
-              max-w-[1600px]
-              mx-auto
-
-              grid
-              grid-cols-2
-              md:grid-cols-3
-              lg:grid-cols-4
-
-              gap-[6px]
-              md:gap-3
-            "
-          >
-            {loading ? (
-              Array.from({ length: 8 }).map((_, index) => (
+        {loading ? (
+          <div className="flex gap-1 sm:gap-1.5 px-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-48 sm:w-64 aspect-[4/5] shrink-0 bg-gray-200 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : images.length > 0 ? (
+          <div className="w-full overflow-hidden">
+            <div className="gallery-marquee-track flex gap-1 sm:gap-1.5 w-max">
+              {marqueeImages.map((img, index) => (
                 <div
                   key={index}
-                  className="
-                    w-full
-                    aspect-[4/5]
-                    bg-gray-200
-                    animate-pulse
-                  "
-                />
-              ))
-            ) : filteredImages.length > 0 ? (
-              filteredImages.map((img, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedImage(img.image)}
-                  className="
-                    relative
-                    overflow-hidden
-                    cursor-pointer
-                    group
-                  "
+                  className="relative overflow-hidden group w-48 sm:w-64 aspect-[4/5] shrink-0"
                 >
                   <img
                     src={img.image}
                     alt={img.title || "Brown Hair The Unisex Salon"}
                     loading="lazy"
+                    draggable={false}
                     className="
                       w-full
-                      aspect-[4/5]
-
+                      h-full
                       object-cover
                       object-center
-
                       transition-transform
                       duration-500
                       ease-out
-
                       group-hover:scale-105
                     "
                   />
 
-                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
-                  <div
-                    className="
-                      absolute
-                      inset-0
-
-                      bg-black/0
-                      group-hover:bg-black/20
-
-                      transition-all
-                      duration-500
-                    "
-                  />
-
-                  {/* Optional Zoom Icon */}
-
-                  <div
-                    className="
-                      absolute
-                      inset-0
-
-                      flex
-                      items-center
-                      justify-center
-
-                      opacity-0
-                      group-hover:opacity-100
-
-                      transition-all
-                      duration-500
-                    "
-                  >
-                    <span className="text-white text-3xl font-light">+</span>
-                  </div>
+                  {img.title && (
+                    <div className="absolute left-0 right-0 bottom-0 p-3 sm:p-4 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                      <p className="text-white text-xs sm:text-sm font-semibold leading-snug">
+                        {img.title}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              ))
-            ) : (
-              <div className="col-span-full py-16 text-center text-gray-500">
-                No images available.
-              </div>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
-
-        {/* Lightbox Starts In Part 3 */}
-        {/* Lightbox */}
-
-        {selectedImage && (
-          <div
-            className="
-              fixed
-              inset-0
-              z-[9999]
-
-              bg-black/90
-
-              flex
-              items-center
-              justify-center
-
-              p-4
-            "
-            onClick={() => setSelectedImage(null)}
-          >
-            {/* Close Button */}
-
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="
-                absolute
-                top-5
-                right-5
-
-                w-12
-                h-12
-
-                flex
-                items-center
-                justify-center
-
-                text-white
-                text-4xl
-
-                hover:text-[#C89B5D]
-
-                transition-colors
-                duration-300
-              "
-              aria-label="Close"
-            >
-              &times;
-            </button>
-
-            {/* Image */}
-
-            <img
-              src={selectedImage}
-              alt="Gallery Preview"
-              onClick={(e) => e.stopPropagation()}
-              className="
-                max-w-full
-                max-h-[90vh]
-
-                object-contain
-
-                rounded
-
-                shadow-2xl
-
-                select-none
-              "
-            />
+        ) : (
+          <div className="py-16 text-center text-gray-500">
+            No images available.
           </div>
         )}
 
-        {/* Closing Part Comes In Part 4 */}
+        {/* Explore More CTA */}
+        <div className="flex justify-center mt-12">
+          <Link
+            to="/gallery"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-amber-300 text-amber-700 font-semibold text-sm hover:bg-amber-50 transition-colors"
+          >
+            Explore More
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </section>
     </>
   );

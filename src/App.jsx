@@ -47,11 +47,7 @@ function LayoutWrapper() {
     <div className="min-h-screen flex flex-col bg-bg-default">
       {!isAdmin && <Navbar />}
 
-      <main
-        className={`flex-1 w-full mx-auto px-4 sm:px-6 ${
-          isAdmin ? "max-w-full py-4" : "max-w-5xl py-8"
-        }`}
-      >
+      <main className={`flex-1 ${isAdmin ? "max-w-full py-4" : "w-full pb-8"}`}>
         <Suspense fallback={<RouteLoader />}>
           <ScrollToTop />
 
@@ -73,7 +69,10 @@ function LayoutWrapper() {
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin-forgot" element={<AdminForgot />} />
             <Route path="/admin-reset/:token" element={<AdminReset />} />
-            <Route path="/reset-password/:token" element={<ResetPasswordUser />} />
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPasswordUser />}
+            />
 
             <Route
               path="/admin/*"
