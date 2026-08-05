@@ -123,7 +123,6 @@ export default function Profile() {
   };
 
   const fetchBookings = async () => {
-    console.log("USER API:", import.meta.env.VITE_API_URL);
     setLoadingBookings(true);
     setBookingError("");
 
@@ -346,318 +345,333 @@ export default function Profile() {
   };
 
   const statusStyles = {
-    confirmed: "bg-green-100 text-green-700 border-green-200",
-    completed: "bg-green-100 text-green-700 border-green-200",
+    confirmed: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    completed: "bg-emerald-100 text-emerald-700 border-emerald-200",
     cancelled: "bg-red-100 text-red-700 border-red-200",
-    "no-show": "bg-yellow-100 text-yellow-700 border-yellow-200",
+    "no-show": "bg-amber-100 text-amber-700 border-amber-200",
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 section-fade">
-      <section className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-5 sm:p-7">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-indigo-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
-              <Sparkles className="h-3.5 w-3.5" />
-              Profile Dashboard
-            </span>
-            <h1 className="mt-3 text-2xl font-bold text-slate-900 sm:text-3xl">
-              {displayName}
-            </h1>
-            <p className="text-sm text-slate-600">{displayContact}</p>
-            <p className="mt-2 text-xs text-slate-500">
-              Live status:{" "}
-              <span
-                className={`font-semibold ${connected ? "text-emerald-700" : "text-amber-700"}`}
-              >
-                {connected ? "Connected" : "Connecting..."}
-              </span>
-            </p>
-          </div>
+    <div className="bg-white">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8 space-y-6">
+        {/* Profile header */}
+        <section className="relative overflow-hidden rounded-3xl border border-amber-100 bg-[#FBF6EE] p-5 sm:p-7">
+          <div className="absolute -top-12 -right-10 h-44 w-44 rounded-full bg-amber-300/15 blur-3xl" />
+          <div className="absolute -bottom-14 -left-10 h-44 w-44 rounded-full bg-amber-200/15 blur-3xl" />
 
-          <button
-            onClick={handleLogout}
-            className="w-full sm:w-auto rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900"
-          >
-            Logout
-          </button>
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft sm:p-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-900">
-              Profile Information
-            </h2>
-            <p className="text-sm text-slate-600">
-              Manage your account details and contact information.
-            </p>
-          </div>
-
-          {!isEditingProfile ? (
-            <button
-              type="button"
-              onClick={startEditProfile}
-              disabled={profileLoading}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-sm font-medium text-indigo-700 transition-all hover:border-indigo-300 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <Pencil className="h-4 w-4" />
-              Edit Profile
-            </button>
-          ) : null}
-        </div>
-
-        {profileNotice && (
-          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-            {profileNotice}
-          </div>
-        )}
-        {profileError && (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {profileError}
-          </div>
-        )}
-
-        {profileLoading ? (
-          <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
-            Loading profile...
-          </div>
-        ) : (
-          <form onSubmit={handleProfileSave} className="mt-5 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                  First Name
-                </label>
-                <Input
-                  value={profileForm.firstName}
-                  onChange={(event) =>
-                    handleProfileChange("firstName", event.target.value)
-                  }
-                  placeholder="Enter first name"
-                  error={Boolean(fieldErrors.firstName)}
-                  disabled={!isEditingProfile || profileSaving}
-                />
-                {fieldErrors.firstName && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.firstName}
-                  </p>
-                )}
+          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 shrink-0 rounded-full bg-white border border-amber-200 shadow-sm flex items-center justify-center text-amber-600">
+                <UserRound className="h-7 w-7" />
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                  Last Name
-                </label>
-                <Input
-                  value={profileForm.lastName}
-                  onChange={(event) =>
-                    handleProfileChange("lastName", event.target.value)
-                  }
-                  placeholder="Enter last name"
-                  disabled={!isEditingProfile || profileSaving}
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                  Email
-                </label>
-                <Input
-                  type="email"
-                  value={profileForm.email}
-                  onChange={(event) =>
-                    handleProfileChange("email", event.target.value)
-                  }
-                  placeholder="Enter email"
-                  error={Boolean(fieldErrors.email)}
-                  disabled={!isEditingProfile || profileSaving}
-                />
-                {fieldErrors.email && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.email}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                  Phone
-                </label>
-                <Input
-                  value={profileForm.phone}
-                  onChange={(event) =>
-                    handleProfileChange("phone", event.target.value)
-                  }
-                  placeholder="Enter phone number"
-                  error={Boolean(fieldErrors.phone)}
-                  disabled={!isEditingProfile || profileSaving}
-                />
-                {fieldErrors.phone && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {fieldErrors.phone}
-                  </p>
-                )}
+                <span className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                  Profile Dashboard
+                </span>
+                <h1 className="mt-3 text-2xl font-bold text-gray-900 sm:text-3xl">
+                  {displayName}
+                </h1>
+                <p className="text-sm text-gray-500">{displayContact}</p>
+                <p className="mt-2 text-xs text-gray-500">
+                  Live status:{" "}
+                  <span
+                    className={`font-semibold ${connected ? "text-emerald-700" : "text-amber-700"}`}
+                  >
+                    {connected ? "Connected" : "Connecting..."}
+                  </span>
+                </p>
               </div>
             </div>
 
-            {isEditingProfile && (
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={cancelEditProfile}
-                  disabled={profileSaving}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <X className="h-4 w-4" />
-                  Cancel
-                </button>
+            <button
+              onClick={handleLogout}
+              className="w-full sm:w-auto rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:text-gray-900"
+            >
+              Logout
+            </button>
+          </div>
+        </section>
 
-                <button
-                  type="submit"
-                  disabled={profileSaving}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:-translate-y-0.5 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <Save className="h-4 w-4" />
-                  {profileSaving ? "Saving..." : "Save Changes"}
-                </button>
+        {/* Profile info */}
+        <section className="rounded-3xl border border-amber-100 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Profile Information
+              </h2>
+              <p className="text-sm text-gray-500">
+                Manage your account details and contact information.
+              </p>
+            </div>
+
+            {!isEditingProfile ? (
+              <button
+                type="button"
+                onClick={startEditProfile}
+                disabled={profileLoading}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-sm font-medium text-amber-700 transition-all hover:border-amber-300 hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Pencil className="h-4 w-4" />
+                Edit Profile
+              </button>
+            ) : null}
+          </div>
+
+          {profileNotice && (
+            <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {profileNotice}
+            </div>
+          )}
+          {profileError && (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {profileError}
+            </div>
+          )}
+
+          {profileLoading ? (
+            <div className="mt-4 rounded-xl border border-amber-100 bg-[#FBF6EE] p-4 text-sm text-gray-600">
+              Loading profile...
+            </div>
+          ) : (
+            <form onSubmit={handleProfileSave} className="mt-5 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">
+                    First Name
+                  </label>
+                  <Input
+                    value={profileForm.firstName}
+                    onChange={(event) =>
+                      handleProfileChange("firstName", event.target.value)
+                    }
+                    placeholder="Enter first name"
+                    error={Boolean(fieldErrors.firstName)}
+                    disabled={!isEditingProfile || profileSaving}
+                  />
+                  {fieldErrors.firstName && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {fieldErrors.firstName}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">
+                    Last Name
+                  </label>
+                  <Input
+                    value={profileForm.lastName}
+                    onChange={(event) =>
+                      handleProfileChange("lastName", event.target.value)
+                    }
+                    placeholder="Enter last name"
+                    disabled={!isEditingProfile || profileSaving}
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    value={profileForm.email}
+                    onChange={(event) =>
+                      handleProfileChange("email", event.target.value)
+                    }
+                    placeholder="Enter email"
+                    error={Boolean(fieldErrors.email)}
+                    disabled={!isEditingProfile || profileSaving}
+                  />
+                  {fieldErrors.email && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {fieldErrors.email}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">
+                    Phone
+                  </label>
+                  <Input
+                    value={profileForm.phone}
+                    onChange={(event) =>
+                      handleProfileChange("phone", event.target.value)
+                    }
+                    placeholder="Enter phone number"
+                    error={Boolean(fieldErrors.phone)}
+                    disabled={!isEditingProfile || profileSaving}
+                  />
+                  {fieldErrors.phone && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {fieldErrors.phone}
+                    </p>
+                  )}
+                </div>
               </div>
-            )}
-          </form>
-        )}
-      </section>
 
-      {bookingNotice && (
-        <div className="text-sm text-green-700 bg-green-50 rounded-xl px-3 py-2 border border-green-200">
-          {bookingNotice}
-        </div>
-      )}
-      {bookingError && (
-        <div className="text-sm text-red-700 bg-red-50 rounded-xl px-3 py-2 border border-red-200">
-          {bookingError}
-        </div>
-      )}
-
-      <section>
-        <h2 className="font-semibold mb-3 text-slate-900">Booking History</h2>
-        {loadingBookings ? (
-          <div className="rounded-2xl border border-slate-100 bg-white p-5 text-sm text-slate-600 shadow-soft">
-            Loading bookings...
-          </div>
-        ) : !Array.isArray(bookings) || bookings.length === 0 ? (
-          <div className="rounded-2xl border border-slate-100 bg-white p-5 text-sm text-slate-600 shadow-soft">
-            No bookings yet
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {Array.isArray(bookings) &&
-              bookings.map((booking) => {
-                console.log("BOOKING ITEM:", booking);
-                const canCancel = ["pending", "accepted"].includes(
-                  booking.status,
-                );
-
-                const statusLabelMap = {
-                  confirmed: "Confirmed",
-                  completed: "Completed",
-                  cancelled: "Cancelled",
-                  "no-show": "No Show",
-                };
-
-                const statusLabel =
-                  statusLabelMap[booking.status] || "Confirmed";
-
-                return (
-                  <article
-                    key={booking._id}
-                    className="rounded-3xl border border-slate-100 bg-gradient-to-br p-4 shadow-soft sm:p-5"
+              {isEditingProfile && (
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={cancelEditProfile}
+                    disabled={profileSaving}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:border-gray-300 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="font-semibold text-slate-900">
-                          {booking.serviceName ||
-                            booking.serviceId?.title ||
-                            "Service"}
-                        </h3>
-                        <p className="mt-1 text-xs text-slate-500 font-mono">
-                          #{booking._id?.slice(-8) || "N/A"}
-                        </p>
-                      </div>
-                      <span
-                        className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
-                          statusStyles[booking.status] ||
-                          "bg-gray-100 text-gray-700 border-gray-200"
-                        }`}
-                      >
-                        {statusLabel}
-                      </span>
-                    </div>
+                    <X className="h-4 w-4" />
+                    Cancel
+                  </button>
 
-                    <div className="mt-4 grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
-                      <div className="flex items-start gap-2">
-                        <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-indigo-600" />
-                        <span>{formatDateTime(booking)}</span>
-                      </div>
+                  <button
+                    type="submit"
+                    disabled={profileSaving}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-gray-900 shadow-lg shadow-amber-400/25 transition-all hover:-translate-y-0.5 hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <Save className="h-4 w-4" />
+                    {profileSaving ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              )}
+            </form>
+          )}
+        </section>
 
-                      <div className="flex items-start gap-2">
-                        <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                        <span>
-                          {formatCurrency(
-                            booking.totalAmount ||
-                              booking.price ||
-                              booking.serviceId?.price ||
-                              0,
-                          )}
+        {bookingNotice && (
+          <div className="text-sm text-emerald-700 bg-emerald-50 rounded-xl px-3 py-2 border border-emerald-200">
+            {bookingNotice}
+          </div>
+        )}
+        {bookingError && (
+          <div className="text-sm text-red-700 bg-red-50 rounded-xl px-3 py-2 border border-red-200">
+            {bookingError}
+          </div>
+        )}
+
+        {/* Booking history */}
+        <section>
+          <h2 className="font-semibold mb-3 text-gray-900 text-lg">
+            Booking History
+          </h2>
+          {loadingBookings ? (
+            <div className="rounded-2xl border border-amber-100 bg-white p-5 text-sm text-gray-600 shadow-sm">
+              Loading bookings...
+            </div>
+          ) : !Array.isArray(bookings) || bookings.length === 0 ? (
+            <div className="rounded-2xl border border-amber-100 bg-white p-5 text-sm text-gray-600 shadow-sm">
+              No bookings yet
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {Array.isArray(bookings) &&
+                bookings.map((booking) => {
+                  const canCancel = ["pending", "accepted"].includes(
+                    booking.status,
+                  );
+
+                  const statusLabelMap = {
+                    confirmed: "Confirmed",
+                    completed: "Completed",
+                    cancelled: "Cancelled",
+                    "no-show": "No Show",
+                  };
+
+                  const statusLabel =
+                    statusLabelMap[booking.status] || "Confirmed";
+
+                  return (
+                    <article
+                      key={booking._id}
+                      className="rounded-3xl border border-amber-100 bg-white p-4 shadow-sm sm:p-5"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="font-semibold text-gray-900">
+                            {booking.serviceName ||
+                              booking.serviceId?.title ||
+                              "Service"}
+                          </h3>
+                          <p className="mt-1 text-xs text-gray-400 font-mono">
+                            #{booking._id?.slice(-8) || "N/A"}
+                          </p>
+                        </div>
+                        <span
+                          className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                            statusStyles[booking.status] ||
+                            "bg-gray-100 text-gray-700 border-gray-200"
+                          }`}
+                        >
+                          {statusLabel}
                         </span>
                       </div>
 
-                      <div className="flex items-start gap-2">
-                        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-purple-600" />
-                        <span>{booking.artist?.name || "N/A"}</span>
-                      </div>
-                    </div>
+                      <div className="mt-4 grid gap-3 text-sm text-gray-700 sm:grid-cols-2">
+                        <div className="flex items-start gap-2">
+                          <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                          <span>{formatDateTime(booking)}</span>
+                        </div>
 
-                    {booking.status === "completed" && (
-                      <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
-                        Service completed. Thank you for booking with Brown
-                        Salon.
-                      </div>
-                    )}
+                        <div className="flex items-start gap-2">
+                          <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                          <span>
+                            {formatCurrency(
+                              booking.totalAmount ||
+                                booking.price ||
+                                booking.serviceId?.price ||
+                                0,
+                            )}
+                          </span>
+                        </div>
 
-                    {booking.status === "cancelled" && (
-                      <div className="mt-3 p-3 rounded-full bg-red-100 text-red-700 text-sm">
-                        Booking cancelled. You can book another appointment
-                        anytime.
+                        <div className="flex items-start gap-2">
+                          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                          <span>{booking.artist?.name || "N/A"}</span>
+                        </div>
                       </div>
-                    )}
 
-                    {booking.status === "no-show" && (
-                      <div className="mt-3 p-3 rounded-full bg-yellow-100 text-yellow-700 text-sm">
-                        You missed this appointment. Please book again if
-                        needed.
-                      </div>
-                    )}
+                      {booking.status === "completed" && (
+                        <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
+                          Service completed. Thank you for booking with Brown
+                          Salon.
+                        </div>
+                      )}
 
-                    {canCancel && (
-                      <div className="pt-4">
-                        <button
-                          onClick={() => handleCancelBooking(booking._id)}
-                          disabled={cancellingId === booking._id}
-                          className="rounded-xl bg-rose-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                          {cancellingId === booking._id
-                            ? "Cancelling..."
-                            : "Cancel Booking"}
-                        </button>
-                      </div>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        )}
-      </section>
+                      {booking.status === "cancelled" && (
+                        <div className="mt-3 p-3 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm">
+                          Booking cancelled. You can book another appointment
+                          anytime.
+                        </div>
+                      )}
+
+                      {booking.status === "no-show" && (
+                        <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-100 text-amber-700 text-sm">
+                          You missed this appointment. Please book again if
+                          needed.
+                        </div>
+                      )}
+
+                      {canCancel && (
+                        <div className="pt-4">
+                          <button
+                            onClick={() => handleCancelBooking(booking._id)}
+                            disabled={cancellingId === booking._id}
+                            className="rounded-xl bg-rose-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {cancellingId === booking._id
+                              ? "Cancelling..."
+                              : "Cancel Booking"}
+                          </button>
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

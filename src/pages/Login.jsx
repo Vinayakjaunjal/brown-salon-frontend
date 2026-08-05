@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Lock, Phone, UserCircle2 } from "lucide-react";
+import { Sparkles, ShieldCheck } from "lucide-react";
 import Input from "../components/Input";
 import api from "../utils/api";
 import { AuthSticker } from "../components/illustrations/SalonIllustrations";
 import { clearAuthSession } from "../utils/auth";
-import { useEffect } from "react";
 
 const phoneRegex = /^\+?[0-9\s()-]{8,20}$/;
 
@@ -106,6 +105,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (step === 2 && timer > 0) {
       const interval = setInterval(() => {
@@ -163,32 +163,30 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[calc(100dvh-4rem)] overflow-x-hidden py-4 sm:py-8 md:py-10">
-      <div className="mx-auto w-full max-w-5xl px-1 sm:px-2">
-        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-soft overflow-hidden">
-          <section className="hidden lg:flex bg-gradient-to-br from-yellow-100 via-amber-50 to-white p-8 xl:p-10">
-            <div className="flex flex-col justify-between w-full">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 leading-tight">
-                  Welcome to Brown Hair - The Unisex Salon.
-                </h2>
-                <p className="mt-3 text-sm text-gray-600">
-                  Easy bookings, verified professionals, and transparent pricing
-                  for every appointment.
-                </p>
-              </div>
-              <div className="w-full max-w-sm mx-auto">
-                <AuthSticker />
-              </div>
-            </div>
-          </section>
+    <div className="min-h-[calc(100dvh-4rem)] overflow-x-hidden bg-[#FBF6EE] py-6 sm:py-10 md:py-14">
+      <style>{`
+        @keyframes login-fade-up {
+          from { opacity: 0; transform: translateY(14px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .login-animate {
+          animation: login-fade-up 0.6s ease-out both;
+        }
+      `}</style>
 
-          <section className="p-4 sm:p-7 md:p-8">
+      <div className="mx-auto w-full max-w-5xl px-3 sm:px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white rounded-2xl sm:rounded-3xl border border-amber-100 shadow-xl shadow-amber-900/5 overflow-hidden">
+          {/* FORM — now on the left on desktop */}
+          <section className="order-1 p-5 sm:p-7 md:p-10 login-animate">
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <span className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+                <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                Brown Salon
+              </span>
+              <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-gray-900">
                 {title}
               </h1>
-              <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+              <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
             </div>
 
             {(error || roleBlockedMessage) && (
@@ -223,14 +221,27 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                   />
+
+                  {!isRegister && (
+                    <div className="text-right -mt-2">
+                      <button
+                        type="button"
+                        onClick={() => nav("/forgot-password")}
+                        className="text-sm text-gray-900 hover:underline"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
 
               {step === 2 && (
                 <>
-                  <p className="text-sm text-center text-gray-600">
-                    OTP sent to {email}
-                  </p>
+                  <div className="rounded-xl border border-amber-100 bg-[#FBF6EE] p-3 text-center text-sm text-gray-600">
+                    OTP sent to{" "}
+                    <span className="font-semibold text-gray-900">{email}</span>
+                  </div>
 
                   <Input
                     value={otp}
@@ -241,14 +252,20 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={handleVerifyOtp}
-                    className="w-full py-3 rounded-2xl btn-primary font-semibold"
+                    disabled={loading}
+                    className="w-full py-3 rounded-2xl bg-amber-400 text-gray-900 font-semibold hover:bg-amber-300 transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Verify OTP
+                    {loading ? "Verifying..." : "Verify OTP"}
                   </button>
 
-                  <div className="text-center text-sm">
+                  <div className="text-center text-sm text-gray-500">
                     {canResend ? (
-                      <button onClick={handleResendOtp}>Resend OTP</button>
+                      <button
+                        onClick={handleResendOtp}
+                        className="text-amber-700 font-semibold hover:underline"
+                      >
+                        Resend OTP
+                      </button>
                     ) : (
                       <span>Resend in {timer}s</span>
                     )}
@@ -257,7 +274,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="text-sm underline w-full"
+                    className="text-sm text-gray-500 underline w-full"
                   >
                     Back
                   </button>
@@ -267,24 +284,17 @@ export default function Login() {
               {step === 1 && (
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-2xl btn-primary font-semibold"
+                  disabled={loading}
+                  className="w-full py-3 rounded-2xl bg-amber-400 text-gray-900 font-semibold hover:bg-amber-300 transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {isRegister ? "Send OTP" : "Login"}
+                  {loading
+                    ? "Please wait..."
+                    : isRegister
+                      ? "Send OTP"
+                      : "Login"}
                 </button>
               )}
             </form>
-
-            {!isRegister && step === 1 && (
-              <div className="text-right mt-2">
-                <button
-                  type="button"
-                  onClick={() => nav("/forgot-password")}
-                  className="text-sm text-indigo-600 hover:underline"
-                >
-                  Forgot Password?
-                </button>
-              </div>
-            )}
 
             <div className="text-center text-sm text-gray-600 mt-5">
               {isRegister
@@ -293,11 +303,36 @@ export default function Login() {
               <button
                 type="button"
                 onClick={switchMode}
-                className="font-semibold text-gray-900 underline underline-offset-2"
+                className="font-semibold text-amber-600 underline underline-offset-2 hover:text-amber-700"
                 disabled={loading}
               >
                 {isRegister ? "Login" : "Register"}
               </button>
+            </div>
+          </section>
+
+          {/* ILLUSTRATION — now on the right on desktop, visible on mobile too */}
+          <section className="order-2 relative overflow-hidden flex bg-gradient-to-br from-amber-100 via-amber-50 to-white p-6 sm:p-8 xl:p-10 login-animate">
+            <div className="absolute -top-14 -right-10 h-48 w-48 rounded-full bg-amber-300/20 blur-3xl" />
+            <div className="absolute -bottom-14 -left-10 h-48 w-48 rounded-full bg-amber-200/25 blur-3xl" />
+
+            <div className="relative flex flex-col justify-between w-full">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-amber-700">
+                  <ShieldCheck size={14} />
+                  Trusted by thousands
+                </span>
+                <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
+                  Welcome to Brown Hair - The Unisex Salon.
+                </h2>
+                <p className="mt-3 text-sm text-gray-600">
+                  Easy bookings, verified professionals, and transparent pricing
+                  for every appointment.
+                </p>
+              </div>
+              <div className="w-full max-w-xs sm:max-w-sm mx-auto mt-6 lg:mt-0">
+                <AuthSticker />
+              </div>
             </div>
           </section>
         </div>

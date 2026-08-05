@@ -12,8 +12,6 @@ const categories = [
 
 export default function Services() {
   const [services, setServices] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
-
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
@@ -28,39 +26,52 @@ export default function Services() {
       : services.filter((s) => s.category === selectedCategory);
 
   return (
-    <div className="space-y-8 section-fade">
-      <section className="rounded-3xl bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 px-5 sm:px-7 py-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-          Choose Your Service
-        </h1>
+    <div className="bg-white">
+      {/* Header */}
+      <section className="bg-[#FBF6EE] pt-5 sm:pt-6 pb-5 sm:pb-6">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 text-center">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+            Choose Your Service
+          </h1>
 
-        <p className="text-sm text-gray-600 mt-2 max-w-2xl">
-          Premium salon services in Nagpur including haircut, beard styling,
-          hair spa and skin treatments at Brown Hair The Unisex Salon.
-        </p>
+          <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
+            Premium salon services in Nagpur.
+          </p>
+        </div>
       </section>
 
-      <div className="flex gap-2 mb-4 flex-wrap">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-full border ${
-              selectedCategory === cat
-                ? "bg-amber-400 text-black"
-                : "bg-white text-gray-700"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      {/* Filters + Grid */}
+      <section className="py-10 sm:py-14">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="flex gap-2.5 mb-8 flex-wrap justify-center sm:justify-start">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                  selectedCategory === cat
+                    ? "bg-amber-400 text-gray-900 border-amber-400"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-amber-300 hover:text-amber-700"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
 
-      <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-        {filteredServices.map((service) => (
-          <ServiceCard key={service._id} service={service} />
-        ))}
-      </div>
+          {filteredServices.length > 0 ? (
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {filteredServices.map((service) => (
+                <ServiceCard key={service._id} service={service} />
+              ))}
+            </div>
+          ) : (
+            <div className="py-16 text-center text-gray-500">
+              No services available in this category.
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { CheckCircle2, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import {
+  CheckCircle2,
+  Phone,
+  Mail,
+  MapPin,
+  ArrowRight,
+  Star,
+} from "lucide-react";
 import { Helmet } from "react-helmet";
 import api from "../utils/api";
 
@@ -41,132 +48,163 @@ export default function Contact() {
     }
   };
 
+  const inputClass =
+    "w-full border border-gray-200 px-3.5 py-2.5 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-300 transition-colors";
+
   return (
     <>
       <Helmet>
         <title>Contact Brown Hair The Unisex Salon</title>
       </Helmet>
-      <div className="space-y-10 sm:space-y-14 text-slate-900">
-        {/* HERO */}
-        <section className="rounded-[30px] border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-6 sm:p-10">
-          <div className="space-y-5">
-            <span className="inline-flex rounded-full bg-indigo-900 px-3 py-1 text-xs font-semibold text-white">
-              Contact Us
-            </span>
+      <div className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 sm:py-10 space-y-10 sm:space-y-14">
+          {/* HERO */}
+          <section className="relative overflow-hidden rounded-3xl border border-amber-100 bg-[#FBF6EE] p-6 sm:p-10">
+            <div className="absolute -top-12 -right-10 h-44 w-44 rounded-full bg-amber-300/15 blur-3xl" />
+            <div className="absolute -bottom-14 -left-10 h-44 w-44 rounded-full bg-amber-200/15 blur-3xl" />
 
-            <h1 className="text-3xl sm:text-4xl font-bold">
-              Get in Touch with Brown Hair The Unisex Salon
-            </h1>
+            <div className="relative space-y-5">
+              <span className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-3 py-1 text-xs font-semibold text-white">
+                <Star size={12} className="text-amber-400 fill-amber-400" />
+                Contact Us
+              </span>
 
-            <p className="text-gray-600 max-w-2xl">
-              Have questions or want to book an appointment? Reach out to our
-              team for quick assistance.
-            </p>
-          </div>
-        </section>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 max-w-2xl leading-tight">
+                Get in Touch with Brown Hair The Unisex Salon
+              </h1>
 
-        {/* CONTACT INFO + FORM */}
-        <section className="grid gap-6 lg:grid-cols-2">
-          {/* INFO */}
-          <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-            <h2 className="text-xl font-semibold">Contact Information</h2>
-
-            <div className="flex gap-3 items-center">
-              <Phone className="text-green-500" />
-              <a href="tel:+919623245713">+91 9623245713</a>
+              <p className="text-gray-500 max-w-2xl leading-relaxed">
+                Have questions or want to book an appointment? Reach out to our
+                team for quick assistance.
+              </p>
             </div>
+          </section>
 
-            <div className="flex gap-3 items-center">
-              <Mail className="text-blue-500" />
-              <a href="mailto:brown.unisex.salon@gmail.com">
-                brown.unisex.salon@gmail.com
-              </a>
-            </div>
+          {/* CONTACT INFO + FORM */}
+          <section className="grid gap-6 lg:grid-cols-2">
+            {/* INFO */}
+            <div className="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-4">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Contact Information
+              </h2>
 
-            <div className="flex gap-3 items-center">
-              <MapPin className="text-red-500" />
-              <span>Nagpur, Maharashtra</span>
-            </div>
-
-            <div className="pt-4">
-              <h3 className="font-semibold mb-2">Why Contact Us?</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex gap-2">
-                  <CheckCircle2 className="text-green-500" />
-                  Book appointments easily
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="text-green-500" />
-                  Get service guidance
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="text-green-500" />
-                  Resolve your queries quickly
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* FORM */}
-          <div className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-semibold mb-4">Send us a Message</h2>
-
-            {success && (
-              <div className="bg-green-50 text-green-700 p-2 rounded mb-3 text-sm">
-                {success}
+              <div className="flex gap-3 items-center">
+                <span className="w-9 h-9 shrink-0 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                  <Phone size={16} />
+                </span>
+                <a
+                  href="tel:+919623245713"
+                  className="text-sm text-gray-700 hover:text-amber-700 transition-colors"
+                >
+                  +91 9623245713
+                </a>
               </div>
-            )}
 
-            {error && (
-              <div className="bg-red-50 text-red-700 p-2 rounded mb-3 text-sm">
-                {error}
+              <div className="flex gap-3 items-center">
+                <span className="w-9 h-9 shrink-0 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                  <Mail size={16} />
+                </span>
+                <a
+                  href="mailto:brown.unisex.salon@gmail.com"
+                  className="text-sm text-gray-700 hover:text-amber-700 transition-colors"
+                >
+                  brown.unisex.salon@gmail.com
+                </a>
               </div>
-            )}
 
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="text"
-                placeholder="Name"
-                value={form.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-                className="w-full border px-3 py-2 rounded-xl"
-              />
+              <div className="flex gap-3 items-center">
+                <span className="w-9 h-9 shrink-0 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                  <MapPin size={16} />
+                </span>
+                <span className="text-sm text-gray-700">
+                  Nagpur, Maharashtra
+                </span>
+              </div>
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                className="w-full border px-3 py-2 rounded-xl"
-              />
+              <div className="pt-4 border-t border-amber-100">
+                <h3 className="font-semibold mb-3 text-gray-900">
+                  Why Contact Us?
+                </h3>
+                <ul className="space-y-2.5 text-sm text-gray-600">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="text-amber-600 w-4.5 h-4.5 shrink-0" />
+                    Book appointments easily
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="text-amber-600 w-4.5 h-4.5 shrink-0" />
+                    Get service guidance
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="text-amber-600 w-4.5 h-4.5 shrink-0" />
+                    Resolve your queries quickly
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-              <input
-                type="text"
-                placeholder="Phone"
-                value={form.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-                className="w-full border px-3 py-2 rounded-xl"
-              />
+            {/* FORM */}
+            <div className="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Send us a Message
+              </h2>
 
-              <textarea
-                placeholder="Message"
-                value={form.message}
-                onChange={(e) => handleChange("message", e.target.value)}
-                className="w-full border px-3 py-2 rounded-xl"
-                rows={4}
-              />
+              {success && (
+                <div className="bg-emerald-50 text-emerald-700 p-2.5 rounded-lg mb-3 text-sm">
+                  {success}
+                </div>
+              )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-emerald-500 text-white py-2 rounded-xl flex items-center justify-center gap-2"
-              >
-                {loading ? "Sending..." : "Send Message"}
-                <ArrowRight size={16} />
-              </button>
-            </form>
-          </div>
-        </section>
+              {error && (
+                <div className="bg-red-50 text-red-700 p-2.5 rounded-lg mb-3 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-3.5">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={form.name}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                  className={inputClass}
+                />
+
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={form.email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  className={inputClass}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Phone"
+                  value={form.phone}
+                  onChange={(e) => handleChange("phone", e.target.value)}
+                  className={inputClass}
+                />
+
+                <textarea
+                  placeholder="Message"
+                  value={form.message}
+                  onChange={(e) => handleChange("message", e.target.value)}
+                  className={inputClass}
+                  rows={4}
+                />
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-amber-400 text-gray-900 font-semibold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-300 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Sending..." : "Send Message"}
+                  <ArrowRight size={16} />
+                </button>
+              </form>
+            </div>
+          </section>
+        </div>
       </div>
     </>
   );
